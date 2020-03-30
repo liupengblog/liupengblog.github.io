@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java8,ModernJava,Stream," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Stream和其它集合类的区别在于：其它集合类主要关注与有限数量的数据的访问和有效管理(增删改)，而Stream并没有提供访问和管理元素的方式，而是通过声明数据源的方式，利用可计算的操作在数据源上执行，当然BaseStream.iterator() 和 BaseStream.spliterator()操作提供了遍历元素的方法。 Java Stream提供了提供了串行和并行两种类型的流，保持一致的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Stream--(2)常用操作">
+<meta property="og:url" content="http://yoursite.com/2019/02/24/Java%20Stream--(2)%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="Stream和其它集合类的区别在于：其它集合类主要关注与有限数量的数据的访问和有效管理(增删改)，而Stream并没有提供访问和管理元素的方式，而是通过声明数据源的方式，利用可计算的操作在数据源上执行，当然BaseStream.iterator() 和 BaseStream.spliterator()操作提供了遍历元素的方法。 Java Stream提供了提供了串行和并行两种类型的流，保持一致的">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream-api-tutorial.jpg">
+<meta property="article:published_time" content="2019-02-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-03-10T03:26:04.958Z">
+<meta property="article:author" content="Sptan">
+<meta property="article:tag" content="Java8">
+<meta property="article:tag" content="ModernJava">
+<meta property="article:tag" content="Stream">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream-api-tutorial.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/24/Java Stream--(2)常用操作/"/>
+
+
+
+
+
+  <title>Java Stream--(2)常用操作 | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/24/Java%20Stream--(2)%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Stream--(2)常用操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-24T00:00:00+08:00">
+                2019-02-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Modern-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">ModernJava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream-api-tutorial.jpg" alt=""></p>
+<p>Stream和其它集合类的区别在于：其它集合类主要关注与有限数量的数据的访问和有效管理(增删改)，而Stream并没有提供访问和管理元素的方式，而是通过声明数据源的方式，利用可计算的操作在数据源上执行，当然BaseStream.iterator() 和 BaseStream.spliterator()操作提供了遍历元素的方法。</p>
+<p>Java Stream提供了提供了串行和并行两种类型的流，保持一致的接口，提供函数式编程方式，以管道方式提供中间操作和最终执行操作，为Java语言的集合提供了现代语言提供的类似的高阶函数操作，简化和提高了Java集合的功能。</p>
+<a id="more"></a>
+
+<p>Stream接口还包含几个基本类型的子接口如IntStream, LongStream 和 DoubleStream。</p>
+<p>关于流和其它集合具体的区别，可以参照下面的列表：</p>
+<ul>
+<li>不存储数据。流是基于数据源的对象，它本身不存储数据元素，而是通过管道将数据源的元素传递给操作。</li>
+<li>函数式编程。流的操作不会修改数据源，例如filter不会将数据源中的数据删除。</li>
+<li>延迟操作。流的很多操作如filter,map等中间操作是延迟执行的，只有到终点操作才会将操作顺序执行。</li>
+<li>可以解绑。对于无限数量的流，有些操作是可以在有限的时间完成的，比如limit(n) 或 findFirst()，这些操作可是实现”短路”(Short-circuiting)，访问到有限的元素后就可以返回。</li>
+<li>纯消费。流的元素只能访问一次，类似Iterator，操作没有回头路，如果你想从头重新访问流的元素，对不起，你得重新生成一个新的流。</li>
+<li>流的操作是以管道的方式串起来的。流管道包含一个数据源，接着包含零到N个中间操作，最后以一个终点操作结束。</li>
+</ul>
+<h1 id="过滤-Filter"><a href="#过滤-Filter" class="headerlink" title="过滤(Filter)"></a>过滤(Filter)</h1><p>filter的定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate);</span><br></pre></td></tr></table></figure>
+<p>这个方法，传入一个Predicate的函数接口，Predicate函数接口传入一个泛型参数T，做完操作之后，返回一个boolean值；filter方法的作用，是对这个boolean做判断，返回true判断之后的对象，下面一个案例，可以看到怎么使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String[] dd &#x3D; &#123; &quot;a&quot;, &quot;b&quot;, &quot;c&quot; &#125;;</span><br><span class="line">Stream&lt;String&gt; stream &#x3D; Arrays.stream(dd);</span><br><span class="line">stream.filter(str -&gt; str.equals(&quot;a&quot;))</span><br><span class="line">        .forEach(System.out::println);&#x2F;&#x2F;返回字符串为a的值</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用谓词过滤举例"><a href="#使用谓词过滤举例" class="headerlink" title="使用谓词过滤举例"></a>使用谓词过滤举例</h2><h3 id="留下偶数"><a href="#留下偶数" class="headerlink" title="留下偶数"></a>留下偶数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Integer[] sixNums &#x3D; &#123;1, 2, 3, 4, 5, 6&#125;;</span><br><span class="line">Integer[] evens &#x3D;</span><br><span class="line">Stream.of(sixNums).filter(n -&gt; n%2 &#x3D;&#x3D; 0).toArray(Integer[]::new);</span><br></pre></td></tr></table></figure>
+<p>经过条件“被 2 整除”的 filter，剩下的数字为 {2, 4, 6}。</p>
+<h3 id="把单词挑出来"><a href="#把单词挑出来" class="headerlink" title="把单词挑出来"></a>把单词挑出来</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; output &#x3D; reader.lines().</span><br><span class="line"> flatMap(line -&gt; Stream.of(line.split(REGEXP))).</span><br><span class="line"> filter(word -&gt; word.length() &gt; 0).</span><br><span class="line"> collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>这段代码首先把每行的单词用 flatMap 整理到新的 Stream，然后保留长度不为 0 的，就是整篇文章中的全部单词了。</p>
+<h2 id="过滤重复元素"><a href="#过滤重复元素" class="headerlink" title="过滤重复元素"></a>过滤重复元素</h2><p>distinct过来流中的重复元素，distinct定义如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;T&gt; distinct();</span><br></pre></td></tr></table></figure>
+<p>distinct使用的例子如下：</p>
+<p>代码清单，对象类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class Emp &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private Integer age;</span><br><span class="line">    private Double salary;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;省略构造函数、equals、hashCode、getter、setter方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码清单，测试类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">@RunWith(MockitoJUnitRunner.class)</span><br><span class="line">public class Intermediate1Test &#123;</span><br><span class="line">    private List&lt;Emp&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    @Before</span><br><span class="line">    public void init() &#123;</span><br><span class="line">        list.add(new Emp(&quot;YuanGong1&quot;, 20, 1000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong1&quot;, 20, 1000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong2&quot;, 25, 2000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong3&quot;, 30, 3000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong4&quot;, 35, 4000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong5&quot;, 38, 5000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong6&quot;, 45, 9000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong7&quot;, 55, 10000.0));</span><br><span class="line">        list.add(new Emp(&quot;YuanGong8&quot;, 42, 15000.0));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Test</span><br><span class="line">    public void testDistinct() &#123;</span><br><span class="line">        Arrays.asList(3, 1, 2, 1).stream().distinct().sorted().forEach(str -&gt; System.out.println(str));</span><br><span class="line"></span><br><span class="line">        list.stream().distinct().forEach(e -&gt; System.out.println(e.getName()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述对象类Emp中如果不添加equals方法和添加正确的equals方法，可以看出distinct的效果是不一样的。</p>
+<h2 id="跳过元素"><a href="#跳过元素" class="headerlink" title="跳过元素"></a>跳过元素</h2><p>skip(n)跳过Stream中前面的n个元素。注意limit(n)与skip(n)是互补的。下面的例子过滤出热量大于300卡路里的食物后，抛弃前两个元素，保留后面的结果流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Dish&gt; dishes &#x3D; menu.stream()</span><br><span class="line">    .filter(d -&gt; d.getCalories() &gt; 300)</span><br><span class="line">    .skip(2)</span><br><span class="line">    .collect(toList());</span><br></pre></td></tr></table></figure>
+<h2 id="排序（sort）"><a href="#排序（sort）" class="headerlink" title="排序（sort）"></a>排序（sort）</h2><p>Stream的sort有两个实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;对流中元素进行自然顺序排序，如果流中元素不可比较，会抛出异常</span><br><span class="line">&#x2F;&#x2F;这是有状态的中间操作(stateful intermediate operation)</span><br><span class="line">Stream&lt;T&gt; sorted();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;根据提供的Comparator对流中元素进行排序</span><br><span class="line">&#x2F;&#x2F;这是有状态的中间操作(stateful intermediate operation)</span><br><span class="line">Stream&lt;T&gt; sorted(Comparator&lt;? super T&gt; comparator);</span><br></pre></td></tr></table></figure>
+
+<p>排序的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testSorted() &#123;</span><br><span class="line">    &#x2F;&#x2F; 对list里的emp对象，取出薪水，并对薪水进行排序，然后输出薪水</span><br><span class="line">    list.stream().map(emp -&gt; emp.getSalary()).sorted()</span><br><span class="line">            .forEach(salary -&gt; System.out.println(salary));</span><br><span class="line">    &#x2F;&#x2F; 根据emp的年龄属性，进行排序</span><br><span class="line">    list.stream().sorted(Comparator.comparing(Emp::getAge))</span><br><span class="line">            .forEach(e -&gt; System.out.println(e));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="转换-Mapping"><a href="#转换-Mapping" class="headerlink" title="转换(Mapping)"></a>转换(Mapping)</h1><p>一个常用的操作方式是从某个对象中摘取信息，比如从数据表中选取某个字段内容。Stream API提供了类似的设施：map和flatMap。当然，map和flatMap不但能够进行信息提取，也能进行对象信息转换。</p>
+<h2 id="为流中的每个元素使用函数-map"><a href="#为流中的每个元素使用函数-map" class="headerlink" title="为流中的每个元素使用函数(map)"></a>为流中的每个元素使用函数(map)</h2><p>map方法定义：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;无状态的中间操作</span><br><span class="line">&#x2F;&#x2F;param R:map操作后返回的新Stream的元素类型</span><br><span class="line">&#x2F;&#x2F;param mapper:应用到Stream中每个元素上的无状态的函数</span><br><span class="line">&#x2F;&#x2F;return:新的Stream</span><br><span class="line">&lt;R&gt; Stream&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; mapper);</span><br></pre></td></tr></table></figure>
+<p>map方法接收一个函数类型的参数，这个函数应用到Stream中的每个元素上，产生一个新的元素。例如下面的例子返回每道菜的菜名。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private List&lt;Dish&gt; menu &#x3D; Arrays.asList(</span><br><span class="line">    new Dish(&quot;seasonal fruit&quot;, true, 120, Dish.Type.OTHER),</span><br><span class="line">    new Dish(&quot;prawns&quot;, false, 300, Dish.Type.FISH),</span><br><span class="line">    new Dish(&quot;rice&quot;, true, 350, Dish.Type.OTHER),</span><br><span class="line">    new Dish(&quot;chicken&quot;, false, 400, Dish.Type.MEAT),</span><br><span class="line">    new Dish(&quot;french fries&quot;, true, 530, Dish.Type.OTHER));</span><br><span class="line">    </span><br><span class="line">@Test</span><br><span class="line">public void testMap1() &#123;</span><br><span class="line">    List&lt;String&gt; dishNames &#x3D; menu.stream()</span><br><span class="line">        .map(Dish::getName)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">    dishNames.stream().forEach(d -&gt; System.out.println(d));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中，map函数中传递了一个方法引用，来取得菜名，最终通过收集器，将菜(Dish)的列表变成了菜名(String)的列表。<br>不知道看到方法引用时有没有疑惑？Dish::getName是一个无参返回String的函数，明显跟map的参数无法匹配，为什么这儿能够编译通过并且获得期望的运行效果呢？<br>答案在于方法引用只是lambda表达式的简写语法糖，并不是说方法引用中的方法类型需要匹配map的参数类型。上述的方法引用，实际上是以下形式的简写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; dishNames &#x3D; menu.stream()</span><br><span class="line">    .map(d -&gt; d.getName())</span><br><span class="line">    .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>现在，lambda表达式d -&gt; d.getName()是map的参数，这个lambda表达式是符合Function这个函数式接口的定义的。查阅下java源代码，可以看到这个接口的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@FunctionalInterface</span><br><span class="line">public interface Function&lt;T, R&gt; &#123;</span><br><span class="line"></span><br><span class="line">    &#x2F;**</span><br><span class="line">     * Applies this function to the given argument.</span><br><span class="line">     *</span><br><span class="line">     * @param t the function argument</span><br><span class="line">     * @return the function result</span><br><span class="line">     *&#x2F;</span><br><span class="line">    R apply(T t);</span><br><span class="line">    </span><br><span class="line">    default &lt;V&gt; Function&lt;V, R&gt; compose(Function&lt;? super V, ? extends T&gt; before) &#123;</span><br><span class="line">        Objects.requireNonNull(before);</span><br><span class="line">        return (V v) -&gt; apply(before.apply(v));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    default &lt;V&gt; Function&lt;T, V&gt; andThen(Function&lt;? super R, ? extends V&gt; after) &#123;</span><br><span class="line">        Objects.requireNonNull(after);</span><br><span class="line">        return (T t) -&gt; after.apply(apply(t));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &lt;T&gt; Function&lt;T, T&gt; identity() &#123;</span><br><span class="line">        return t -&gt; t;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上述源代码中可以看出Function接口中只有apply一个抽象方法，所以符合函数式接口的定义。我们随之可以得出结论：任何接受某个类型的单个参数，并返回某个类型的函数定义都是符合map方法的参数类型的函数定义。我们上面的例子中，函数接收一个Dish类型的参数，返回String类型的结果。<br>当然，map操作不仅仅像上述例子中采用类似SQL中投影操作，也可以有其他形式的转化操作，只要符合Function类型的定义即可。<br>下面的例子从Integer转化为String。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testMap3() &#123;</span><br><span class="line">    List&lt;Integer&gt; numbers &#x3D; Arrays.asList(1, 2, 3, 4);</span><br><span class="line">    List&lt;String&gt; words &#x3D; numbers.stream()</span><br><span class="line">        .map(i -&gt; &quot;word&quot; + i)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">    words.stream().forEach(wl -&gt; System.out.println(wl));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>很自然的我们就能想到，普通的企业应用中，使用map处理entity与DTO(VO)的转换也是没有问题的。</p>
+<h2 id="flatMap"><a href="#flatMap" class="headerlink" title="flatMap"></a>flatMap</h2><p>map用于Stream中元素的一对一转换，如果Stream中的每个元素在转换过程中是1对多的关系并且最终需要将转换后的多个值放置于单一结果流中，就需要使用flatMap。<br>老规矩，看flatMap的方法签名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;无状态的中间操作</span><br><span class="line">&#x2F;&#x2F;@param &lt;R&gt; :由旧的Stream的元素类型转换后的新Stream的元素类型</span><br><span class="line">&#x2F;&#x2F;@param mapper:Function函数接口，由输入参数T生成新值序列的Stream</span><br><span class="line">&#x2F;&#x2F;@return : (一个)新的Stream</span><br><span class="line"> &lt;R&gt; Stream&lt;R&gt; flatMap(Function&lt;? super T, ? extends Stream&lt;? extends R&gt;&gt; mapper);</span><br></pre></td></tr></table></figure>
+<p>跟map相同的是，flatMap方法的参数仍旧是Function这个函数式接口，并且Function都是接收T类型的参数，不同的是map的Function参数返回一个新的类型R，flatMap的Function参数返回一个R的Stream！<br>考虑这个例子，由{“Hello”,”World”}这个字符串列表生成字符列表{“H”,”e”,”l”,”l”,”o”,”W”,”o”,”r”,”l”, “d”}。<br>我们的思路很自然的是将Hello拆分为{“H”,”e”,”l”,”l”,”o”}，将World拆分为{“W”,”o”,”r”,”l”, “d”}，然后再合并起来。如果使用map方法，字符串到字符的拆分结果为两个字符数组，在类型匹配上遇到困境。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFlatMap() &#123;</span><br><span class="line">    List&lt;String&gt; words &#x3D; Arrays.asList(&quot;Hello&quot;, &quot;World&quot;);</span><br><span class="line">    &#x2F;&#x2F;下面的cs变量只能是字符串数组的列表，否则出现编译错误</span><br><span class="line">    List&lt;String[]&gt; cs &#x3D; words.stream()</span><br><span class="line">            .map(word -&gt; word.split(&quot;&quot;))</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ <div align=center>
+![](http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/flatMap1.jpg)
+ </div>
+ <center>简单的时序图例子</center>
+使用flatMap，可以把Stream元素转化时产生的一对多的元素序列扁平化到一个Stream中，代码如下：
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFlatMap1() &#123;</span><br><span class="line">    List&lt;String&gt; words &#x3D; Arrays.asList(&quot;Hello&quot;, &quot;World&quot;);</span><br><span class="line">    List&lt;String&gt; cs &#x3D; words.stream()</span><br><span class="line">            .flatMap(word -&gt; Stream.of(word.split(&quot;&quot;)))</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">    cs.stream().forEach(c -&gt; System.out.println(c));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>核心的地方就是lambda表达式：word -&gt; Stream.of(word.split(“”))。word代表原始的输入字符串，这里是”Hello”和”World”，word.split(“”)是普通的map方法转换结果，转换结果是每个单词拆分后的字符构成的字符序列，这个字符序列可以构造一个Stream，便成为了flatMap的参数构成部分。根据Stream的构造方式不同，以下的lambda表达式都可以替代上述的lambda，效果都是一样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;可替代方式</span><br><span class="line">word -&gt; Arrays.stream(word.split(&quot;&quot;))</span><br></pre></td></tr></table></figure>
+<p>我们思考一下，只要符合flatMap定义的所有形式都是可以使用，所以我们甚至可以分步骤，先是使用map，转换出字符数组的列表，然后再对这个结果应用flatMap方法，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFlatMap1_3() &#123;</span><br><span class="line">    List&lt;String&gt; words &#x3D; Arrays.asList(&quot;Hello&quot;, &quot;World&quot;);</span><br><span class="line">    List&lt;String&gt; cs &#x3D; words.stream()</span><br><span class="line">        .map(word -&gt; word.split(&quot;&quot;))</span><br><span class="line">        .flatMap(wa -&gt; Arrays.stream(wa))</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">    cs.stream().forEach(c -&gt; System.out.println(c));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>lambda表达式wa -&gt; Arrays.stream(wa)可以替换为方法引用的形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Arrays::stream</span><br></pre></td></tr></table></figure>
+<p>flatMap方法对于一些初学者有些疑惑，通过上述的剖析，发现牢牢抓住函数签名，理解之后对于问题的解决思路就会开阔很多。</p>
+<h1 id="查找与匹配-Finding-and-Matching"><a href="#查找与匹配-Finding-and-Matching" class="headerlink" title="查找与匹配(Finding and Matching)"></a>查找与匹配(Finding and Matching)</h1><p>另一个常用操作是查找数据集中的元素，Stream通过提供allMatch, anyMatch, noneMatch, findFirst, and findAny这些方法对此功能提供支持。</p>
+<h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><p>希望确定流中的元素是否匹配Predicate时，Stream接口定义了anyMatch、allMatch与noneMatch，每种方法返回一个布尔值。<br>三个方法的签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 短路终结操作.</span><br><span class="line"> * Stream为空恒定返回true。</span><br><span class="line"> *&#x2F;</span><br><span class="line">boolean allMatch(Predicate&lt;? super T&gt; predicate);</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 短路终结操作.</span><br><span class="line"> * Stream为空恒定返回true。</span><br><span class="line"> *&#x2F;</span><br><span class="line">boolean noneMatch(Predicate&lt;? super T&gt; predicate);</span><br><span class="line">&#x2F;**</span><br><span class="line"> * 短路终结操作.</span><br><span class="line"> * Stream为空恒定返回false。</span><br><span class="line"> *&#x2F;</span><br><span class="line">boolean anyMatch(Predicate&lt;? super T&gt; predicate);</span><br></pre></td></tr></table></figure>
+<p>注意：Stream为空时，上述几个方法不论Predicate为什么，返回值都是恒定的。<br>这几个方法用途不言自明。<br>下面我们举一个质数计算机的例子说明上述三个方法的使用。<br>大于或者等于2的自然数中，如果一个数无法1和该自然数之外的其他数整除，则这个数为质数(prime number), 否则为合数(composite number)。在数学上，一个简单的做法是遍历N能否能被从2到sqrt(N)之间的素数整除。 若不能则为素数。我们这里采取一种效率稍低但是简单的算法，不是采用<strong>从2到sqrt(N)之间的素数</strong>，而是采用<strong>从2到sqrt(N)之间的整数</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Primes &#123;</span><br><span class="line">    &#x2F;**</span><br><span class="line">     * 判断一个整数是否为质数.</span><br><span class="line">     *</span><br><span class="line">     * @param num</span><br><span class="line">     * @return</span><br><span class="line">     *&#x2F;</span><br><span class="line">    public boolean isPrime(int num) &#123;</span><br><span class="line">        int limit &#x3D; (int) (Math.sqrt(num) + 1);</span><br><span class="line">        return num &#x3D;&#x3D; 2 ||</span><br><span class="line">            num &gt; 1 &amp;&amp; IntStream.range(2, limit).noneMatch(divisor -&gt; num % divisor &#x3D;&#x3D; 0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面我们借助noneMatch方法，质数校验易如反掌。<br>利用新做成的isPrime方法，下面是两种质数校验方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testIsPrimeUsingAllMatch() &#123;</span><br><span class="line">    Assert.assertTrue(IntStream.of(2, 3, 5, 7, 11, 13, 17, 19)</span><br><span class="line">        .allMatch(calculator::isPrime));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Test</span><br><span class="line">public void testIsPrimeWithComposites() &#123;</span><br><span class="line">    Assert.assertFalse(Stream.of(4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20)</span><br><span class="line">        .anyMatch(calculator::isPrime));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第一个测试调用已知质数流中的allMatch方法，仅当所有值均为质数时返回true。<br>第二个测试对一个合数集合使用anyMatch，认定集合中的所有数字均不满足谓词。<br>特别注意上述三个方法在处理空集合时返回值忽略谓词结果，可能不太直观。<br>下面的测试用例均能通过，需要特别注意。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testEmptyStream() &#123;</span><br><span class="line">    Assert.assertTrue(Stream.empty().allMatch(e -&gt; false));</span><br><span class="line">    Assert.assertTrue(Stream.empty().allMatch(e -&gt; true));</span><br><span class="line">    Assert.assertTrue(Stream.empty().noneMatch(e -&gt; false));</span><br><span class="line">    Assert.assertTrue(Stream.empty().noneMatch(e -&gt; true));</span><br><span class="line">    Assert.assertTrue(Stream.empty().allMatch(e -&gt; false));</span><br><span class="line">    Assert.assertTrue(Stream.empty().allMatch(e -&gt; true));</span><br><span class="line">    Assert.assertFalse(Stream.empty().anyMatch(e -&gt; false));</span><br><span class="line">    Assert.assertFalse(Stream.empty().anyMatch(e -&gt; true));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h2><p>Stream接口定义的findFirst方法返回流中第一个符合条件的元素的Optional，而findAny方法返回流中某个元素的Optional。两个方法都没有参数，它们的函数定义非常简单。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;短路终结操作</span><br><span class="line">Optional&lt;T&gt; findFirst();</span><br><span class="line">&#x2F;&#x2F;短路终结操作</span><br><span class="line">Optional&lt;T&gt; findAny();</span><br></pre></td></tr></table></figure>
+<p>下面的例子查找流中的第一个偶数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFindFirst() &#123;</span><br><span class="line">    Optional&lt;Integer&gt; firstEven &#x3D; Stream.of(3, 1, 4, 1, 5, 9, 8, 7, 6)</span><br><span class="line">        .filter(n -&gt; n % 2 &#x3D;&#x3D; 0)</span><br><span class="line">        .findFirst();</span><br><span class="line">    System.out.println(firstEven); &#x2F;&#x2F;print Optional[4]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果流为空或者查找不到匹配元素，会返回空的Optional，如下例所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFindFirstNG() &#123;</span><br><span class="line">    Optional&lt;Integer&gt; firstEvenNG &#x3D; Stream.of(3, 1, 4, 1, 5, 9, 8, 7, 6)</span><br><span class="line">        .filter(n -&gt; n &gt; 10)</span><br><span class="line">        .filter(n -&gt; n % 2 &#x3D;&#x3D; 0)</span><br><span class="line">        .findFirst();</span><br><span class="line">    System.out.println(firstEvenNG); &#x2F;&#x2F;print Optional.empty</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们这里采用的流存在出现顺序，因此无论采用顺序流还是并行流搜索，第一个偶数始终是4。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFindFirstParallel() &#123;</span><br><span class="line">    Optional&lt;Integer&gt; firstEven &#x3D; Stream.of(3, 1, 4, 1, 5, 9, 8, 7, 6)</span><br><span class="line">        .parallel()</span><br><span class="line">        .filter(n -&gt; n % 2 &#x3D;&#x3D; 0)</span><br><span class="line">        .findFirst();</span><br><span class="line">    System.out.println(firstEvenNG); &#x2F;&#x2F;总是返回 Optional[4]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="规约-reduce"><a href="#规约-reduce" class="headerlink" title="规约(reduce)"></a>规约(reduce)</h1><p>这个方法的主要作用是把 Stream 元素组合起来。它提供一个起始值（种子），然后依照运算规则（BinaryOperator），和前面 Stream 的第一个、第二个、第 n 个元素组合。从这个意义上说，字符串拼接、数值的 sum、min、max、average 都是特殊的 reduce。例如 Stream 的 sum 就相当于</p>
+<p>Integer sum = integers.reduce(0, (a, b) -&gt; a+b); 或</p>
+<p>Integer sum = integers.reduce(0, Integer::sum);</p>
+<p>也有没有起始值的情况，这时会把 Stream 的前面两个元素组合起来，返回的是 Optional。<br>reduce 的用例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 字符串连接，concat &#x3D; &quot;ABCD&quot;</span><br><span class="line">String concat &#x3D; Stream.of(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;).reduce(&quot;&quot;, String::concat); </span><br><span class="line">&#x2F;&#x2F; 求最小值，minValue &#x3D; -3.0</span><br><span class="line">double minValue &#x3D; Stream.of(-1.5, 1.0, -3.0, -2.0).reduce(Double.MAX_VALUE, Double::min); </span><br><span class="line">&#x2F;&#x2F; 求和，sumValue &#x3D; 10, 有起始值</span><br><span class="line">int sumValue &#x3D; Stream.of(1, 2, 3, 4).reduce(0, Integer::sum);</span><br><span class="line">&#x2F;&#x2F; 求和，sumValue &#x3D; 10, 无起始值</span><br><span class="line">sumValue &#x3D; Stream.of(1, 2, 3, 4).reduce(Integer::sum).get();</span><br><span class="line">&#x2F;&#x2F; 过滤，字符串连接，concat &#x3D; &quot;ace&quot;</span><br><span class="line">concat &#x3D; Stream.of(&quot;a&quot;, &quot;B&quot;, &quot;c&quot;, &quot;D&quot;, &quot;e&quot;, &quot;F&quot;).</span><br><span class="line"> filter(x -&gt; x.compareTo(&quot;Z&quot;) &gt; 0).</span><br><span class="line"> reduce(&quot;&quot;, String::concat);</span><br></pre></td></tr></table></figure>
+<p>上面代码例如第一个示例的 reduce()，第一个参数（空白字符）即为起始值，第二个参数（String::concat）为 BinaryOperator。这类有起始值的 reduce() 都返回具体的对象。而对于第四个示例没有起始值的 reduce()，由于可能没有足够的元素，返回的是 Optional，请留意这个区别。</p>
+<h2 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h2><h2 id="最大值与最小值"><a href="#最大值与最小值" class="headerlink" title="最大值与最小值"></a>最大值与最小值</h2><p>min和max属于终结操作(相对于中间操作)，是规约(reduce)的一种特殊形式。先看定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line"> * 根据参数中的比较器比较Stream中元素，返回最小的元素.</span><br><span class="line"> * @param comparator:函数式接口java.util.Comparator，用于比较Stream中的元素.</span><br><span class="line"> * @return: Optional封装的最小值，注意Stream中为空时实际不存在最小值，防止返回null使用了Optional封装</span><br><span class="line"> *&#x2F;</span><br><span class="line">Optional&lt;T&gt; min(Comparator&lt;? super T&gt; comparator);</span><br><span class="line"></span><br><span class="line">&#x2F;*</span><br><span class="line"> * 根据参数中的比较器比较Stream中元素，返回最大的元素.</span><br><span class="line"> * @param comparator:函数式接口java.util.Comparator，用于比较Stream中的元素.</span><br><span class="line"> * @return: Optional封装的最大值，注意Stream中为空时实际不存在最大值，防止返回null使用了Optional封装</span><br><span class="line"> *&#x2F;</span><br><span class="line">Optional&lt;T&gt; max(Comparator&lt;? super T&gt; comparator);</span><br></pre></td></tr></table></figure>
+<p>使用也非常简单，下面是例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testMinMax1() &#123;</span><br><span class="line">    List&lt;String&gt; strs &#x3D; Arrays.asList(&quot;d&quot;, &quot;b&quot;, &quot;a&quot;, &quot;c&quot;, &quot;e&quot;);</span><br><span class="line">    Optional&lt;String&gt; min &#x3D; strs.stream().min(Comparator.comparing(Function.identity()));</span><br><span class="line">    Optional&lt;String&gt; max &#x3D; strs.stream().max(Comparator.naturalOrder());</span><br><span class="line">    System.out.println(String.format(&quot;min:%s; max:%s&quot;, min.get(), max.get()));&#x2F;&#x2F; min:a; max:e</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>min的含义不言自明，倒是Comparator.comparing(Function.identity())需要解释一下。分开来看，Comparator.comparing的定义如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;位于类java.util.Comparator，是java8新增的方法</span><br><span class="line">public static &lt;T, U extends Comparable&lt;? super U&gt;&gt; Comparator&lt;T&gt; comparing(</span><br><span class="line">            Function&lt;? super T, ? extends U&gt; keyExtractor);</span><br></pre></td></tr></table></figure>
+<p>注意Comparator.comparing的参数是一个Function，我们上述例子中的比较对象是字符串本身，所以向Comparator.comparing的参数传递这个lambda表达式是没有问题的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t -&gt; t</span><br></pre></td></tr></table></figure>
+<p>这个表达式很常用，所以java8在Function接口中提供了一个默认实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;这是java8 JDK中java.util.function.Function的源代码</span><br><span class="line">static &lt;T&gt; Function&lt;T, T&gt; identity() &#123;</span><br><span class="line">    return t -&gt; t;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种函数式表达方式有点别扭，原因是因为把函数作为参数，而不是把普通的对象作为参数。<br>我们换个方式，不是拿字符串本身进行比较，而是使用字符串长度作为比较对象，感受一下比较器的用法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testMinMax1_1() &#123;</span><br><span class="line">    List&lt;String&gt; strs &#x3D; Arrays.asList(&quot;abc&quot;, &quot;a&quot;, &quot;ab&quot;, &quot;abcd&quot;, &quot;bb&quot;);</span><br><span class="line">    Optional&lt;String&gt; min &#x3D; strs.stream().min(Comparator.comparing(String::length));</span><br><span class="line">    Optional&lt;String&gt; max &#x3D; strs.stream().max(Comparator.comparing(String::length));</span><br><span class="line">    System.out.println(String.format(&quot;min:%s; max:%s&quot;, min.get(), max.get()));&#x2F;&#x2F; min:a; max:abcd</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="数值流"><a href="#数值流" class="headerlink" title="数值流"></a>数值流</h1><p>出于性能考虑，对应常用的基本类型int，long，double，java Stream提供了处理这些基本类型的子接口，分别为IntStream, LongStream, DoubleStream。</p>
+<h2 id="基本数值流转换为对象数值流"><a href="#基本数值流转换为对象数值流" class="headerlink" title="基本数值流转换为对象数值流"></a>基本数值流转换为对象数值流</h2><p>由于类型不兼容，以下代码是无法通过编译的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IntStream.of(1,2,3,4).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+<p>三种解决方案可以实现int流到Integer流。</p>
+<h3 id="使用boxed方法"><a href="#使用boxed方法" class="headerlink" title="使用boxed方法"></a>使用boxed方法</h3><p>第一种方案利用boxed方法，将IntStream转换为Stream<Integer>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void testBoxed() &#123;</span><br><span class="line">    List&lt;Integer&gt; ints &#x3D; IntStream.of(1, 2, 3, 4)</span><br><span class="line">        .boxed()</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="利用mapToObj方法"><a href="#利用mapToObj方法" class="headerlink" title="利用mapToObj方法"></a>利用mapToObj方法</h3><p>第二种方案利用mapToObj方法，将基本类型流中的每个元素转换为包装类的一个实例。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testMapToObj() &#123;</span><br><span class="line">    List&lt;Integer&gt; ints &#x3D; IntStream.of(1, 2, 3, 4)</span><br><span class="line">        .mapToObj(Integer::valueOf)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与之相对的是mapToInt、mapToLong、mapToDouble方法，将对象流解析为与之相关的基本类型流。</p>
+<h3 id="采用collect方法的三参数形式"><a href="#采用collect方法的三参数形式" class="headerlink" title="采用collect方法的三参数形式"></a>采用collect方法的三参数形式</h3><p>collect的三参数形式签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 这个方法的执行效果相当于以下代码，combiner只在并行处理时合并结果使用.</span><br><span class="line"> *     R result &#x3D; supplier.get();</span><br><span class="line"> *     for (int element : this stream)</span><br><span class="line"> *         accumulator.accept(result, element);</span><br><span class="line"> *     return result;</span><br><span class="line"> * @param supplier: 创建新结果容器的函数</span><br><span class="line"> * @param accumulator: 将元素添加到新创建的容器中的累加器函数</span><br><span class="line"> * @param combiner: 并行操作时合并结果的合并函数</span><br><span class="line"> * @return 规约操作的结果</span><br><span class="line"> *&#x2F;</span><br><span class="line">&lt;R&gt; R collect(Supplier&lt;R&gt; supplier,</span><br><span class="line">              ObjIntConsumer&lt;R&gt; accumulator,</span><br><span class="line">              BiConsumer&lt;R, R&gt; combiner);</span><br></pre></td></tr></table></figure>
+<p>使用collect方法的三参数形式将基本类转为包装类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testCollect() &#123;</span><br><span class="line">    List&lt;Integer&gt; ints &#x3D; IntStream.of(1, 2, 3, 4)</span><br><span class="line">        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如例所示，Supplier是ArrayList<Integer>的构造函数；累加器(accumulator)为add方法，表示如何为列表添加单个元素；并行操作中使用的组合器(combiner)是addAll方法，它能将两个列表合二为一。</p>
+<h2 id="对象数值流转换为基本数值流"><a href="#对象数值流转换为基本数值流" class="headerlink" title="对象数值流转换为基本数值流"></a>对象数值流转换为基本数值流</h2><p>前面提到过，mapToInt, mapToLong和mapToDouble将对象流解析为相对应的基本类型流。</p>
+<h1 id="流的拼接"><a href="#流的拼接" class="headerlink" title="流的拼接"></a>流的拼接</h1><p>流的拼接有三种方案。</p>
+<h2 id="使用Stream-concat"><a href="#使用Stream-concat" class="headerlink" title="使用Stream.concat"></a>使用Stream.concat</h2><p>Stream.concat签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;</span><br><span class="line">static &lt;T&gt; Stream&lt;T&gt; concat(Stream&lt;? extends T&gt; a, Stream&lt;? extends T&gt; b)</span><br></pre></td></tr></table></figure>
+<p>concat方法创建一个惰性拼接流(lazily concatenated stream),其元素是第一个流的所有元素，后跟第二个流的所有元素。如果两个输入流均为有序流，则生成的流也是有序流，如果任一个流为并行流，则生成的流为并行流。关闭生成的流也会关闭两个输入流。<br>如果拼接三个流，可以嵌套使用concat。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testConcatThree() &#123;</span><br><span class="line">    Stream&lt;String&gt; first &#x3D; Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);</span><br><span class="line">    Stream&lt;String&gt; second &#x3D; Stream.of(&quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;);</span><br><span class="line">    Stream&lt;String&gt; third &#x3D; Stream.of(&quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    List&lt;String&gt; strs &#x3D; Stream.concat(Stream.concat(first, second), third)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">    List&lt;String&gt; expectedStrs &#x3D; Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    Assert.assertEquals(expectedStrs, strs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>concat方法构建了流的二叉树，拼接过多容易造成堆栈溢出(抛出StackOverflowException异常)。</p>
+<h2 id="使用Stream-reduce"><a href="#使用Stream-reduce" class="headerlink" title="使用Stream.reduce"></a>使用Stream.reduce</h2><p>组合使用reduce和concat方法，同样可以执行多次拼接。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testConcatReduce() &#123;</span><br><span class="line">    Stream&lt;String&gt; first &#x3D; Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);</span><br><span class="line">    Stream&lt;String&gt; second &#x3D; Stream.of(&quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;);</span><br><span class="line">    Stream&lt;String&gt; third &#x3D; Stream.of(&quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    Stream&lt;String&gt; fourth &#x3D; Stream.empty();</span><br><span class="line">    List&lt;String&gt; strs &#x3D; Stream.of(first, second, third, fourth)</span><br><span class="line">        .reduce(Stream.empty(), Stream::concat)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line">    List&lt;String&gt; expectedStrs &#x3D; Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    Assert.assertEquals(expectedStrs, strs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码稍微简洁了些，但是无法解决栈溢出问题。</p>
+<h2 id="使用Stream-flatMap"><a href="#使用Stream-flatMap" class="headerlink" title="使用Stream.flatMap"></a>使用Stream.flatMap</h2><p>多个流拼接时，flatMap是更好的解决方案。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testFlatMap() &#123;</span><br><span class="line">    Stream&lt;String&gt; first &#x3D; Stream.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;).parallel();</span><br><span class="line">    Stream&lt;String&gt; second &#x3D; Stream.of(&quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;);</span><br><span class="line">    Stream&lt;String&gt; third &#x3D; Stream.of(&quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    Stream&lt;String&gt; fourth &#x3D; Stream.empty();</span><br><span class="line">    Stream&lt;String&gt; total &#x3D; Stream.of(first, second, third, fourth)</span><br><span class="line">        .flatMap(Function.identity());</span><br><span class="line">    Assert.assertFalse(total.isParallel());</span><br><span class="line">    List&lt;String&gt; strs &#x3D; total.collect(Collectors.toList());</span><br><span class="line">    List&lt;String&gt; expectedStrs &#x3D; Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;alpha&quot;, &quot;beta&quot;, &quot;gamma&quot;);</span><br><span class="line">    Assert.assertEquals(expectedStrs, strs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码也同样完成了流的拼接，并且栈溢出的可能性更小。但是仍旧有缺点：flatMap返回的流不是并行流！这一点可以在流关闭前通过parallel方法对流进行转化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">total &#x3D; total.parallel();</span><br></pre></td></tr></table></figure>
+
+<p>此外，流的操作中一大块内容是关于流的收集，内容比较多，另外单独讲解。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java8/" rel="tag"># Java8</a>
+          
+            <a href="/tags/ModernJava/" rel="tag"># ModernJava</a>
+          
+            <a href="/tags/Stream/" rel="tag"># Stream</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/23/Java%20Stream--(1)%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95/" rel="next" title="Java Stream--(1)简介及创建方法">
+                <i class="fa fa-chevron-left"></i> Java Stream--(1)简介及创建方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/05/Java%20Stream--(3)%E4%BD%BF%E7%94%A8%E6%94%B6%E9%9B%86%E5%99%A8/" rel="prev" title="Java Stream--(3)使用收集器">
+                Java Stream--(3)使用收集器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#过滤-Filter"><span class="nav-number">1.</span> <span class="nav-text">过滤(Filter)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用谓词过滤举例"><span class="nav-number">1.1.</span> <span class="nav-text">使用谓词过滤举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#留下偶数"><span class="nav-number">1.1.1.</span> <span class="nav-text">留下偶数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#把单词挑出来"><span class="nav-number">1.1.2.</span> <span class="nav-text">把单词挑出来</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤重复元素"><span class="nav-number">1.2.</span> <span class="nav-text">过滤重复元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#跳过元素"><span class="nav-number">1.3.</span> <span class="nav-text">跳过元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排序（sort）"><span class="nav-number">1.4.</span> <span class="nav-text">排序（sort）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#转换-Mapping"><span class="nav-number">2.</span> <span class="nav-text">转换(Mapping)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为流中的每个元素使用函数-map"><span class="nav-number">2.1.</span> <span class="nav-text">为流中的每个元素使用函数(map)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#flatMap"><span class="nav-number">2.2.</span> <span class="nav-text">flatMap</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查找与匹配-Finding-and-Matching"><span class="nav-number">3.</span> <span class="nav-text">查找与匹配(Finding and Matching)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配"><span class="nav-number">3.1.</span> <span class="nav-text">匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查找元素"><span class="nav-number">3.2.</span> <span class="nav-text">查找元素</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#规约-reduce"><span class="nav-number">4.</span> <span class="nav-text">规约(reduce)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#求和"><span class="nav-number">4.1.</span> <span class="nav-text">求和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最大值与最小值"><span class="nav-number">4.2.</span> <span class="nav-text">最大值与最小值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数值流"><span class="nav-number">5.</span> <span class="nav-text">数值流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数值流转换为对象数值流"><span class="nav-number">5.1.</span> <span class="nav-text">基本数值流转换为对象数值流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用boxed方法"><span class="nav-number">5.1.1.</span> <span class="nav-text">使用boxed方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用mapToObj方法"><span class="nav-number">5.1.2.</span> <span class="nav-text">利用mapToObj方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用collect方法的三参数形式"><span class="nav-number">5.1.3.</span> <span class="nav-text">采用collect方法的三参数形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象数值流转换为基本数值流"><span class="nav-number">5.2.</span> <span class="nav-text">对象数值流转换为基本数值流</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流的拼接"><span class="nav-number">6.</span> <span class="nav-text">流的拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Stream-concat"><span class="nav-number">6.1.</span> <span class="nav-text">使用Stream.concat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Stream-reduce"><span class="nav-number">6.2.</span> <span class="nav-text">使用Stream.reduce</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Stream-flatMap"><span class="nav-number">6.3.</span> <span class="nav-text">使用Stream.flatMap</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

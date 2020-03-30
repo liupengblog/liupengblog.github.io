@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java8,ModernJava,Stream," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Stream是 Java 8新增加的类，用来补充集合类。 Stream代表数据流，流中的数据元素的数量可能是有限的，也可能是无限的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Stream--(1)简介及创建方法">
+<meta property="og:url" content="http://yoursite.com/2019/02/23/Java%20Stream--(1)%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="Stream是 Java 8新增加的类，用来补充集合类。 Stream代表数据流，流中的数据元素的数量可能是有限的，也可能是无限的。">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/Streams-01-1024x422.jpg">
+<meta property="article:published_time" content="2019-02-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-03-10T03:23:34.299Z">
+<meta property="article:author" content="Sptan">
+<meta property="article:tag" content="Java8">
+<meta property="article:tag" content="ModernJava">
+<meta property="article:tag" content="Stream">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/Streams-01-1024x422.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/23/Java Stream--(1)简介及创建方法/"/>
+
+
+
+
+
+  <title>Java Stream--(1)简介及创建方法 | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/23/Java%20Stream--(1)%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Stream--(1)简介及创建方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-23T00:00:00+08:00">
+                2019-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Modern-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">ModernJava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/Streams-01-1024x422.jpg" alt=""><br>Stream是 Java 8新增加的类，用来补充集合类。</p>
+<p>Stream代表数据流，流中的数据元素的数量可能是有限的，也可能是无限的。</p>
+<a id="more"></a>
+<h1 id="什么是流"><a href="#什么是流" class="headerlink" title="什么是流"></a>什么是流</h1><p>Stream 不是集合元素，它不是数据结构并不保存数据，它是有关算法和计算的，它更像一个高级版本的 Iterator。原始版本的 Iterator，用户只能显式地一个一个遍历元素并对其执行某些操作；高级版本的 Stream，用户只要给出需要对其包含的元素执行什么操作，比如 “过滤掉长度大于 10 的字符串”、“获取每个字符串的首字母”等，Stream 会隐式地在内部进行遍历，做出相应的数据转换。</p>
+<p>Stream 就如同一个迭代器（Iterator），单向，不可往复，数据只能遍历一次，遍历过一次后即用尽了，就好比流水从面前流过，一去不复返。</p>
+<p>而和迭代器又不同的是，Stream 可以并行化操作，迭代器只能命令式地、串行化操作。顾名思义，当使用串行方式去遍历时，每个 item 读完后再读下一个 item。而使用并行去遍历时，数据会被分成多个段，其中每一个都在不同的线程中处理，然后将结果一起输出。Stream 的另外一大特点是，数据源本身可以是无限的。</p>
+<h1 id="流的创建"><a href="#流的创建" class="headerlink" title="流的创建"></a>流的创建</h1><p>流的创建有6种方式，归类如下：</p>
+<h2 id="使用Stream-of从值的序列构建流-Stream-of-T…-values-和-Stream-of-T"><a href="#使用Stream-of从值的序列构建流-Stream-of-T…-values-和-Stream-of-T" class="headerlink" title="使用Stream.of从值的序列构建流:Stream.of(T… values) 和 Stream.of(T)"></a>使用Stream.of从值的序列构建流:Stream.of(T… values) 和 Stream.of(T)</h2><p>Stream.of方法传入元素的可变参数列表,定义与实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@SafeVarargs</span><br><span class="line">@SuppressWarnings(&quot;varargs&quot;) &#x2F;&#x2F; Creating a stream from an array is safe</span><br><span class="line">public static&lt;T&gt; Stream&lt;T&gt; of(T... values) &#123;</span><br><span class="line">    return Arrays.stream(values);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@SafeVarargs属于java泛型的一部分，在使用数组作为参数时出现。因为用户有可能讲一个类型化的数组(typed array)赋给一个Object数组，导致添加的元素引发类型安全问题。</p>
+<p>Stream.of(T)作为特例，创建一个只有一个元素的流。定义与实现如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static&lt;T&gt; Stream&lt;T&gt; of(T t) &#123;</span><br><span class="line">    return StreamSupport.stream(new Streams.StreamBuilderImpl&lt;&gt;(t), false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单个元素构成的流不是很常用。<br>使用Stream.of从值的序列创建流的例子如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 从值的序列构建流.</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Test</span><br><span class="line">public void testOfValues() &#123;</span><br><span class="line">    Stream&lt;Integer&gt; stream &#x3D; Stream.of(1,2,3,4,5,6,7,8,9);</span><br><span class="line">    stream.forEach(p -&gt; System.out.println(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>作为特殊的例子，可以使用String.chars() 或者 tokens构建流:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 使用String.chars() 或者 tokens构建流.</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Test</span><br><span class="line">public void testStringChars() &#123;</span><br><span class="line">    IntStream stream &#x3D; &quot;12345_abcdefg&quot;.chars();</span><br><span class="line">    stream.forEach(p -&gt; System.out.print(p + &quot;,&quot;));</span><br><span class="line">    &#x2F;&#x2F;print 49,50,51,52,53,95,97,98,99,100,101,102,103,</span><br><span class="line">    System.out.println();</span><br><span class="line">    &#x2F;&#x2F;OR</span><br><span class="line"></span><br><span class="line">    Stream&lt;String&gt; stream2 &#x3D; Stream.of(&quot;A$B$C&quot;.split(&quot;\\$&quot;));</span><br><span class="line">    stream2.forEach(p -&gt; System.out.print(p + &quot;,&quot;));</span><br><span class="line">    &#x2F;&#x2F;print A,B,C,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="从数组元素构建流-Arrays-stream-T-array"><a href="#从数组元素构建流-Arrays-stream-T-array" class="headerlink" title="从数组元素构建流:Arrays.stream(T[] array)"></a>从数组元素构建流:Arrays.stream(T[] array)</h2><p>如果提前已经创建好了数组，可以从数组创建流。<br>Arrays.stream定义了多种重载形式，用于处理int，long，double类型和泛型形式的数组。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 从数组元素构建流.</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Test</span><br><span class="line">public void testOfArrayElements() &#123;</span><br><span class="line">    Stream&lt;Integer&gt; stream &#x3D; Stream.of( new Integer[]&#123;1,2,3,4,5,6,7,8,9&#125; );</span><br><span class="line">    stream.forEach(p -&gt; System.out.println(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Collection-stream-构建流"><a href="#使用Collection-stream-构建流" class="headerlink" title="使用Collection.stream()构建流"></a>使用Collection.stream()构建流</h2><p>java8中，Collection接口新增了默认方法stream，来从集合中创建Stream。这可能是最常用的创建Stream的方式了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 使用List.stream()构建流.</span><br><span class="line"> *&#x2F;</span><br><span class="line">@Test</span><br><span class="line">public void testOfListStream() &#123;</span><br><span class="line">    List&lt;Integer&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">    for (int i &#x3D; 1; i &lt; 10; i++) &#123;</span><br><span class="line">        list.add(i);</span><br><span class="line">    &#125;</span><br><span class="line">    Stream&lt;Integer&gt; stream &#x3D; list.stream();</span><br><span class="line">    stream.forEach(p -&gt; System.out.println(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Stream-generate"><a href="#使用Stream-generate" class="headerlink" title="使用Stream.generate()"></a>使用Stream.generate()</h2><p>Stream接口定义了静态工厂方法generate，签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;in java.util.stream.Stream</span><br><span class="line">public static&lt;T&gt; Stream&lt;T&gt; generate(Supplier&lt;T&gt; s);</span><br></pre></td></tr></table></figure>
+<p>generate 方法多次调用Supplier产生一个顺序的无序流。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamGenerate() &#123;</span><br><span class="line">    Stream&lt;Date&gt; stream &#x3D; Stream.generate(() -&gt; new Date());</span><br><span class="line">    stream.limit(10).forEach(p -&gt; System.out.println(p));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>generate方法会无限执行下去，所以我们使用limit限制产生流的元素数量。<br>Supplier的另一个简单应用是Math.random，这个方法不需要参数返回double类型的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamGenerate2() &#123;</span><br><span class="line">    Stream.generate(Math::random).limit(10)</span><br><span class="line">        .forEach(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Stream-iterate-构建流"><a href="#Stream-iterate-构建流" class="headerlink" title="Stream.iterate()构建流"></a>Stream.iterate()构建流</h2><p>Stream接口定义另一种静态工厂方法iterate，签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;in java.util.stream.Stream</span><br><span class="line">public static&lt;T&gt; Stream&lt;T&gt; iterate(final T seed, final UnaryOperator&lt;T&gt; f)</span><br></pre></td></tr></table></figure>
+<p>iterate返回一个无限顺序的有序流(infinite sequential ordered stream),它由迭代应用到初始初始元素种子的函数f产生。不废话，看例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamIterate() &#123;</span><br><span class="line">    List&lt;BigDecimal&gt; nums &#x3D; </span><br><span class="line">        Stream.iterate(BigDecimal.ONE, n -&gt; n.add(BigDecimal.ONE))</span><br><span class="line">            .limit(10).collect(Collectors.toList());</span><br><span class="line">    System.out.println(nums);</span><br><span class="line">    &#x2F;&#x2F;打印结果：[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始值1作为种子，n -&gt; n.add(BigDecimal.ONE)作为函数f实现数字递增。iterate产生无限流，所以使用limit限制产生个数。下面这个例子打印出当天之后的十天：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamIterate2() &#123;</span><br><span class="line">    Stream.iterate(LocalDate.now(), ld -&gt; ld.plusDays(1L))</span><br><span class="line">        .limit(10).forEach(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="range和rangeClosed"><a href="#range和rangeClosed" class="headerlink" title="range和rangeClosed"></a>range和rangeClosed</h2><p>Stream接口定义了三种专门处理基本类型的子接口，分别是IntStream,LongStream,DoubleStream。IntStream和LongStream还包括另外两种创建流的方法：range和rangeClosed，二者签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;in java.util.stream.IntStream</span><br><span class="line">static IntStream range(int startInclusive, int endExclusive);</span><br><span class="line">static IntStream rangeClosed(int startInclusive, int endInclusive);</span><br><span class="line">&#x2F;&#x2F;in java.util.stream.LongStream</span><br><span class="line">static LongStream range(long startInclusive, final long endExclusive);</span><br><span class="line">static LongStream rangeClosed(long startInclusive, final long endInclusive);</span><br></pre></td></tr></table></figure>
+<p>rangeClosed方法包含终值，而range方法不包含终值。两种方法都返回一个顺序的有序流，从第一个参数开始逐一递增。下面展示了两个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamRange() &#123;</span><br><span class="line">    List&lt;Integer&gt; ints &#x3D; IntStream.range(10, 15)</span><br><span class="line">        .boxed().collect(Collectors.toList());</span><br><span class="line">    System.out.println(ints);</span><br><span class="line">    &#x2F;&#x2F;打印结果：[10, 11, 12, 13, 14]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>rangeClosed的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamRangeClosed() &#123;</span><br><span class="line">    List&lt;Long&gt; ls &#x3D; LongStream.rangeClosed(10, 15)</span><br><span class="line">        .boxed().collect(Collectors.toList());</span><br><span class="line">    System.out.println(ls);</span><br><span class="line">    &#x2F;&#x2F;打印结果：[10, 11, 12, 13, 14, 15]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="流的操作简介"><a href="#流的操作简介" class="headerlink" title="流的操作简介"></a>流的操作简介</h1><p>流操作分为中间操作（Intermediate operation）和终结操作（Terminal operation）。 中间操作是lazy的， 不会立即执行，只不过是返回一个记录操作的新的流。 考虑下面的例子，思考一下打印结果是什么呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testStreamIntermediate() &#123;</span><br><span class="line">    LongStream.rangeClosed(10, 15).boxed().map(n -&gt; &#123;</span><br><span class="line">        System.out.println(n);</span><br><span class="line">        return n;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可能期望在控制台打印出10~15这个几个数字，实际上却不会打印出任何东西！原因就在于我们上述例子中只有Stream的中间操作(intermediate)，没有终结操作(terminal),没有终结操作的话，Stream实际上只做一些Stream内的标记操作，不会触发任何实际操作，因为Stream没有被使用，Stream中的数据没有被收集起来。<br>最终操作会最终使用流管道，使用后不能再次被使用。 大部分情况下， 最终操作都是eager的。<br>概括来说：</p>
+<ul>
+<li>中间操作返回流，终结操作处理流并结束流；</li>
+<li>中间操作只是一种标记，只有终结操作才会触发实际计算；</li>
+</ul>
+<h2 id="中间操作"><a href="#中间操作" class="headerlink" title="中间操作"></a>中间操作</h2><p>中间操作又进一步分为无状态的操作和有状态的操作。 像filter，map都是无状态的操作， 处理一个新的元素时不需要获得先前遍历过的元素的状态。 而有状态的操作，像distinct， sorted, 需要得到先前访问的元素的状态。</p>
+<p>有状态的操作在产生结果前需要获得完整的输入。 因此有状态的操作一个并行流时， 可能需要多次传入数据或者需要缓存数据。 而无状态的操作只需传入一次数据。</p>
+<h2 id="终结操作"><a href="#终结操作" class="headerlink" title="终结操作"></a>终结操作</h2><p>终结操作又可以分为短路操作和非短路操作，短路操作是指不用处理全部元素就可以返回结果，比如找到第一个满足条件的元素。之所以要进行如此精细的划分，是因为底层对每一种情况的处理方式不同。</p>
+<p>对Stream的介绍暂时到此为止，后续再介绍Stream的常用操作。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java8/" rel="tag"># Java8</a>
+          
+            <a href="/tags/ModernJava/" rel="tag"># ModernJava</a>
+          
+            <a href="/tags/Stream/" rel="tag"># Stream</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/08/%E4%BD%BF%E7%94%A8%20Sublime%20+%20PlantUML%20%E9%AB%98%E6%95%88%E5%9C%B0%E7%94%BB%E5%9B%BE/" rel="next" title="码农专属画图工具-- Sublime + PlantUML">
+                <i class="fa fa-chevron-left"></i> 码农专属画图工具-- Sublime + PlantUML
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/24/Java%20Stream--(2)%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" rel="prev" title="Java Stream--(2)常用操作">
+                Java Stream--(2)常用操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是流"><span class="nav-number">1.</span> <span class="nav-text">什么是流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流的创建"><span class="nav-number">2.</span> <span class="nav-text">流的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Stream-of从值的序列构建流-Stream-of-T…-values-和-Stream-of-T"><span class="nav-number">2.1.</span> <span class="nav-text">使用Stream.of从值的序列构建流:Stream.of(T… values) 和 Stream.of(T)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从数组元素构建流-Arrays-stream-T-array"><span class="nav-number">2.2.</span> <span class="nav-text">从数组元素构建流:Arrays.stream(T[] array)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Collection-stream-构建流"><span class="nav-number">2.3.</span> <span class="nav-text">使用Collection.stream()构建流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Stream-generate"><span class="nav-number">2.4.</span> <span class="nav-text">使用Stream.generate()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-iterate-构建流"><span class="nav-number">2.5.</span> <span class="nav-text">Stream.iterate()构建流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#range和rangeClosed"><span class="nav-number">2.6.</span> <span class="nav-text">range和rangeClosed</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流的操作简介"><span class="nav-number">3.</span> <span class="nav-text">流的操作简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#中间操作"><span class="nav-number">3.1.</span> <span class="nav-text">中间操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终结操作"><span class="nav-number">3.2.</span> <span class="nav-text">终结操作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

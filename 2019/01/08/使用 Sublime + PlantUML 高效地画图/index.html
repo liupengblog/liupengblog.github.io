@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="PlantUML,流程图,序列图," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="作为资深码农，总是要写各种文档，演示各种PPT，写各种博客，这些都少不了需要图形，用于形象的展示出想要表达的信息。Windows自带的画图、Visio、Rose等各种工具，Mac上的OmniGraffle，在线的ProcessOn,都可以做出各种类型的图形。 但是我作为手残党程序员，使用上述这类作图工具对我是一种折磨，画的慢，画的丑，修改不友好使我对这类工具一直爱不起来，不是说它们不好，但是我确实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="码农专属画图工具-- Sublime + PlantUML">
+<meta property="og:url" content="http://yoursite.com/2019/01/08/%E4%BD%BF%E7%94%A8%20Sublime%20+%20PlantUML%20%E9%AB%98%E6%95%88%E5%9C%B0%E7%94%BB%E5%9B%BE/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="作为资深码农，总是要写各种文档，演示各种PPT，写各种博客，这些都少不了需要图形，用于形象的展示出想要表达的信息。Windows自带的画图、Visio、Rose等各种工具，Mac上的OmniGraffle，在线的ProcessOn,都可以做出各种类型的图形。 但是我作为手残党程序员，使用上述这类作图工具对我是一种折磨，画的慢，画的丑，修改不友好使我对这类工具一直爱不起来，不是说它们不好，但是我确实">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/plantuml.preview.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/sample1.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/%E6%A3%80%E6%9F%A5graphviz%E5%AE%89%E8%A3%85%E7%BB%93%E6%9E%9C.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/checksetup.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/plantumlwebsite.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/detailsequence.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase1.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase2.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase3.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase4.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase5.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase6.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity1.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity2.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity3.png">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity4.png">
+<meta property="article:published_time" content="2019-01-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-03-10T03:44:42.321Z">
+<meta property="article:author" content="Sptan">
+<meta property="article:tag" content="PlantUML">
+<meta property="article:tag" content="流程图">
+<meta property="article:tag" content="序列图">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/plantuml.preview.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/08/使用 Sublime + PlantUML 高效地画图/"/>
+
+
+
+
+
+  <title>码农专属画图工具-- Sublime + PlantUML | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/08/%E4%BD%BF%E7%94%A8%20Sublime%20+%20PlantUML%20%E9%AB%98%E6%95%88%E5%9C%B0%E7%94%BB%E5%9B%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">码农专属画图工具-- Sublime + PlantUML</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-08T00:00:00+08:00">
+                2019-01-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/PlantUML/" itemprop="url" rel="index">
+                    <span itemprop="name">PlantUML</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/plantuml.preview.png" alt=""><br>作为资深码农，总是要写各种文档，演示各种PPT，写各种博客，这些都少不了需要图形，用于形象的展示出想要表达的信息。Windows自带的画图、Visio、Rose等各种工具，Mac上的OmniGraffle，在线的ProcessOn,都可以做出各种类型的图形。</p>
+<p>但是我作为手残党程序员，使用上述这类作图工具对我是一种折磨，画的慢，画的丑，修改不友好使我对这类工具一直爱不起来，不是说它们不好，但是我确实更迫切需要一款用代码敲出来的脚本绘图工具，对，就像Markdown那样的。</p>
+<a id="more"></a>
+<h1 id="什么是-PlantUML"><a href="#什么是-PlantUML" class="headerlink" title="什么是 PlantUML"></a>什么是 PlantUML</h1><p>PlantUML 是一个画图脚本语言,用它可以快速地画出：</p>
+<ul>
+<li>时序图</li>
+<li>用例图</li>
+<li>类图</li>
+<li>活动图</li>
+<li>对象图</li>
+<li>状态图</li>
+<li>组件图</li>
+</ul>
+<p>简单地讲,我们使用画图工具时需要一个一个图去画,但使用 PlantUML 只需要用简洁直观的文字表达出图的内容,然后就可以直接生成图片。看一个最简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">业务Service -&gt; 权限Sevice : 调用用户登录接口</span><br><span class="line">业务Service &lt;- 权限Sevice : 返回用户登录令牌</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果如下:<br> <div align=center><br><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/sample1.png" alt=""><br> </div><br> <center>简单的时序图例子</center></p>
+<hr>
+<h1 id="软件安装与配置（下面例子以MacOS为例说明）"><a href="#软件安装与配置（下面例子以MacOS为例说明）" class="headerlink" title="软件安装与配置（下面例子以MacOS为例说明）"></a>软件安装与配置（下面例子以MacOS为例说明）</h1><h2 id="Sublime"><a href="#Sublime" class="headerlink" title="Sublime"></a>Sublime</h2><p>Sublime 是个强大的可扩展的文本编辑器。进入<a href="http://www.sublimetext.com/" target="_blank" rel="noopener">官网</a>下载对应操作系统下的版本安装即可。这个过程及其简单,并且教程网上一搜一大把,不进一步说明。</p>
+<h2 id="graphviz"><a href="#graphviz" class="headerlink" title="graphviz"></a>graphviz</h2><p>graphviz 是个开源的图片渲染库。安装了这个库才能在操作系统下实现把 PlantUML 脚本转换为图片。<br>使用以下命令安装命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install graphviz</span><br></pre></td></tr></table></figure>
+<p>如果mac系统还没有安装homebrew,需要先安装homebrew,安装homebrew方法:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;usr&#x2F;bin&#x2F;ruby -e &quot;$(curl -fsSL https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;Homebrew&#x2F;install&#x2F;master&#x2F;install)&quot;</span><br></pre></td></tr></table></figure>
+<p>安装成功graphviz后,通过brew list应该能够查询到安装后的结果。<br><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/%E6%A3%80%E6%9F%A5graphviz%E5%AE%89%E8%A3%85%E7%BB%93%E6%9E%9C.png" alt=""></p>
+<h2 id="PlantUML-for-Sublime-插件"><a href="#PlantUML-for-Sublime-插件" class="headerlink" title="PlantUML for Sublime 插件"></a>PlantUML for Sublime 插件</h2><p>有了<a href="https://github.com/jvantuyl/sublime_diagram_plugin" target="_blank" rel="noopener">PlantUML for Sublime 插件</a>后,我们就可以在 Sublime 里写 PlantUML 脚本,然后直接通过一个快捷键生成图片。<br>安装步骤如下:</p>
+<ul>
+<li><a href="https://github.com/jvantuyl/sublime_diagram_plugin/tarball/master" target="_blank" rel="noopener">下载插件</a>,并解压;</li>
+<li>通过 Preferences -&gt; Browse Packages … 打开 sublime 的 Packages 目录,解压后的插件放在 Packages 目录下;</li>
+<li>重启 Sublime。</li>
+</ul>
+<p>为了简化使用,可以在 Sublime 里配置个快捷键。打开 Preferences -&gt; Key Binding - User,添加一个快捷键：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; &quot;keys&quot;: [&quot;alt+d&quot;], &quot;command&quot;: &quot;display_diagrams&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码配置成按住 Option + d 来生成 PlantUML 图片,你可以修改成你自己喜欢的按键。</p>
+<h2 id="查看效果"><a href="#查看效果" class="headerlink" title="查看效果"></a>查看效果</h2><p>打开sublime,新建一个空的文件,加入以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">业务Service -&gt; 权限Sevice : 调用用户登录接口</span><br><span class="line">业务Service &lt;- 权限Sevice : 返回用户登录令牌</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>在sublime窗口中按下快捷键[Option + d],应该就能够看到生成的时序图。效果如下图所示：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/checksetup.png" alt=""><br> </center></p>
+<h1 id="PlantULM-快速入门"><a href="#PlantULM-快速入门" class="headerlink" title="PlantULM 快速入门"></a>PlantULM 快速入门</h1><p>plantUML的<a href="http://plantuml.com/" target="_blank" rel="noopener">官方网址</a>提供了我们需要的所有资料。大家可以看看官网的样子。<br><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/plantumlwebsite.png" alt=""><br>特地给官网截个图放在这儿，是想告诉大家进入这个网站后请不要怀疑是否进了钓鱼网站。虽然这个网站看上去有着浓浓的山寨风和厚重的历史感,但是<strong>的确</strong>是我们需要的plantUML的<strong>官网</strong>。这儿提供了<a href="http://plantuml.com/PlantUML_Language_Reference_Guide.pdf" target="_blank" rel="noopener">权威的官方文档</a>，这个文档不仅仅是入门指南,里面更是详细描述了plantUML的语法,提供了丰富的例子,我们在日常画图时肯定会需要随时查阅。</p>
+<h2 id="时序图举例"><a href="#时序图举例" class="headerlink" title="时序图举例"></a>时序图举例</h2><p>最简单的时序图例子前面已经已经看过了，下面举一个实际情况中更有意义的例子。</p>
+<h3 id="样例代码"><a href="#样例代码" class="headerlink" title="样例代码"></a>样例代码</h3><p>这个例子假想了用户通过app挂号的场景。</p>
+<ul>
+<li>用户：代表使用app挂号的人</li>
+<li>APP：代表手机端应用或者微信小程序</li>
+<li>业务Service：代表我们业务服务，这里包含了挂号业务的最基本逻辑</li>
+<li>HIS：医院信息系统，是实际执行医院挂号的操作，我们的业务服务需要调用HIS来执行真正的挂号</li>
+<li>基础服务：是我们这个假想场景的一系列微服务中的一个环节，在我们的假想场景中，基础服务为各个业务服务提供基础的支撑功能</li>
+<li>统一支付中心：可以立即为封装了支付宝支付、微信支付、银联支付的一个微服务节点</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam dpi 300</span><br><span class="line">title 支付、挂号正常流时序图</span><br><span class="line"></span><br><span class="line">actor 用户</span><br><span class="line"></span><br><span class="line">activate APP</span><br><span class="line"></span><br><span class="line">用户 -&gt; APP : 用户挂号</span><br><span class="line"></span><br><span class="line">activate 业务Service</span><br><span class="line">APP -&gt; 业务Service :  挂号申请(token, 诊所，科室，医生，号段,身份证)</span><br><span class="line">activate HIS</span><br><span class="line">业务Service -&gt; HIS : 获取病人信息</span><br><span class="line">业务Service &lt;- HIS : 返回病人信息</span><br><span class="line">业务Service -&gt; 业务Service : 生成挂号记录即社康订单(保存患者ID，诊所，科室，医生，号段,患者身份证, 挂号费用等信息)</span><br><span class="line">deactivate HIS</span><br><span class="line">	</span><br><span class="line">activate 基础服务</span><br><span class="line">业务Service -&gt; 基础服务 : 创建订单（参数:挂号记录完整信息）</span><br><span class="line"></span><br><span class="line">基础服务 -&gt; 基础服务 : 新建订单, 生成订单号</span><br><span class="line">activate 统一支付中心</span><br><span class="line">基础服务 -&gt; 统一支付中心 : 支付下单(b2c&#x2F;pay&#x2F;consume&#x2F;order&#x2F;pay)</span><br><span class="line"></span><br><span class="line">基础服务 &lt;- 统一支付中心 : 下单成功,返回收银台URL</span><br><span class="line"></span><br><span class="line">基础服务 -&gt; 基础服务 : 订单置为待支付,记录统一支付中心订单号</span><br><span class="line">业务Service &lt;- 基础服务 : 返回收银台URL和基础服务订单号</span><br><span class="line">APP &lt;- 业务Service : 返回收银台URL和挂号记录ID</span><br><span class="line">deactivate 业务Service</span><br><span class="line">APP -&gt; APP : 跳转到收银台URL</span><br><span class="line">用户 -&gt; APP : 用户选择支付方式，输入密码支付</span><br><span class="line"></span><br><span class="line">...等待统一支付中心的异步支付结果通知...</span><br><span class="line"></span><br><span class="line">基础服务 &lt;- 统一支付中心 : 支付成功通知</span><br><span class="line">基础服务 -&gt; 基础服务 : 订单置为支付成功</span><br><span class="line">基础服务 -&gt; 基础服务 : MQ中放置消息</span><br><span class="line"></span><br><span class="line">activate 业务Service</span><br><span class="line">alt 检测到支付成功的消息</span><br><span class="line">	业务Service -&gt; 业务Service : MQ合法性检查(挂号记录是否是等待支付状态等)</span><br><span class="line">	activate HIS</span><br><span class="line">	业务Service -&gt; HIS : 挂号(患者ID,身份证,日期,号源编码,挂号费,诊疗费,其他费,支付方式,交易流水号即基础服务生成的订单ID等参数)</span><br><span class="line">	业务Service &lt;- HIS : 挂号结果(结果，科室，医生，就诊地点，候诊编码，医院交易流水号，就诊序号等)</span><br><span class="line">	deactivate HIS</span><br><span class="line"></span><br><span class="line">	业务Service -&gt; 基础服务 : 更新医院交易流水号</span><br><span class="line">	业务Service &lt;- 基础服务 : 返回更新医院交易流水号结果</span><br><span class="line">end alt</span><br><span class="line"></span><br><span class="line">APP -&gt; 业务Service : 根据挂号记录ID查询挂号结果</span><br><span class="line">APP &lt;- 业务Service : 返回挂号结果</span><br><span class="line"></span><br><span class="line">deactivate 基础服务</span><br><span class="line"></span><br><span class="line">用户 &lt;- APP : 挂号完成</span><br><span class="line"></span><br><span class="line">deactivate APP</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<h3 id="效果预览"><a href="#效果预览" class="headerlink" title="效果预览"></a>效果预览</h3><p><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/detailsequence.png" alt=""></p>
+<h3 id="时序图关键元素说明"><a href="#时序图关键元素说明" class="headerlink" title="时序图关键元素说明"></a>时序图关键元素说明</h3><h4 id="时序图标题"><a href="#时序图标题" class="headerlink" title="时序图标题"></a>时序图标题</h4><p>title定义时序图的标题，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">title 支付、挂号正常流时序图</span><br></pre></td></tr></table></figure>
+<h4 id="对象（Object）"><a href="#对象（Object）" class="headerlink" title="对象（Object）"></a>对象（Object）</h4><p>对象表示的是时序图中的参与者，我们的例子中，APP，业务Service，HIS都是时序图中的对象。在plantUML中，时序图最基础的语法就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象A -&gt; 对象B : 消息</span><br></pre></td></tr></table></figure>
+<p>符合上述语法的plantUML代码便隐式的定义了对象A、对象B和从对象A到对象B的消息（方法调用）, 不需要任何额外的工作。</p>
+<h4 id="时序图中Actor（角色）元素"><a href="#时序图中Actor（角色）元素" class="headerlink" title="时序图中Actor（角色）元素"></a>时序图中Actor（角色）元素</h4><p>系统角色，可以是人、机器、其他系统、子系统；在时序图中用一个小人来表示。我们的例子中，就是【用户】。</p>
+<h4 id="生命线（Lifeline）"><a href="#生命线（Lifeline）" class="headerlink" title="生命线（Lifeline）"></a>生命线（Lifeline）</h4><p>在时序图中表示为从对象图标向下延伸的一条虚线，表示对象存在的时间。</p>
+<h4 id="控制焦点或者生命线激活（Focus-of-Control-or-Activation）"><a href="#控制焦点或者生命线激活（Focus-of-Control-or-Activation）" class="headerlink" title="控制焦点或者生命线激活（Focus of Control or Activation）"></a>控制焦点或者生命线激活（Focus of Control or Activation）</h4><p>又称为激活期，表示时间段的符号，在这个时间段内对象将执行相应的操作，用小矩形表示。<br>使用plantUML语言，就是对生命线进行激活：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">activate 业务Service</span><br></pre></td></tr></table></figure>
+<p>激活期结束后，使用deactivate结束控制焦点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate 业务Service</span><br></pre></td></tr></table></figure>
+<h4 id="消息（Message）"><a href="#消息（Message）" class="headerlink" title="消息（Message）"></a>消息（Message）</h4><p>消息一般分为同步消息（Synchronous Message），异步消息（Asynchronous Message）和返回消息（Return Message）。</p>
+<ul>
+<li>消息的发送者把控制传递给消息的接收者，然后停止活动，等待消息的接收者放弃或者返回控制。用来表示同步的意义；</li>
+<li>消息发送者通过消息把信号传递给消息的接收者，然后继续自己的活动，不等待接受者返回消息或者控制。异步消息的接收者和发送者是并发工作的。</li>
+<li>返回消息表示从过程调用返回。</li>
+</ul>
+<p>在plantUML中，消息调用的例子如下：</p>
+<ul>
+<li>对象A向对象B发送消息M：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象A -&gt; 对象B : 消息M</span><br></pre></td></tr></table></figure>
+<ul>
+<li>对象B向对象A发送消息M（等价于对象B向对象A返回消息M）：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象A &lt;- 对象B : 消息M</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对象A调用自己：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">对象A -&gt; 对象A : 消息M</span><br></pre></td></tr></table></figure>
+<h2 id="用例图举例"><a href="#用例图举例" class="headerlink" title="用例图举例"></a>用例图举例</h2><h3 id="样例代码-1"><a href="#样例代码-1" class="headerlink" title="样例代码"></a>样例代码</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam dpi 300</span><br><span class="line">left to right direction</span><br><span class="line">skinparam packageStyle rectangle</span><br><span class="line">actor customer</span><br><span class="line">actor clerk</span><br><span class="line">rectangle checkout &#123;</span><br><span class="line">customer -- (checkout)</span><br><span class="line">(checkout) .&gt; (payment) : include</span><br><span class="line">(help) .&gt; (checkout) : extends</span><br><span class="line">(checkout) -- clerk</span><br><span class="line">&#125;</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>这段样例代码的展示效果如下：<br><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase1.png" alt=""></p>
+<h3 id="简单解释"><a href="#简单解释" class="headerlink" title="简单解释"></a>简单解释</h3><h4 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h4><p>使用括号 (xxx) 来表示用例，用例用椭圆形表达。</p>
+<h4 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h4><p>两种方式定义角色：</p>
+<ul>
+<li>使用 actor 来定义参与者</li>
+<li>两个冒号包围的对象作为角色</li>
+</ul>
+<p>角色定义的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">:First Actor:</span><br><span class="line">:Another\nactor: as Men2</span><br><span class="line">actor Men3</span><br><span class="line">actor :Last actor: as Men4</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果如下：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase2.png" alt=""><br> </center></p>
+<h4 id="用例描述"><a href="#用例描述" class="headerlink" title="用例描述"></a>用例描述</h4><p>用例描述使用双引号(“”)括起来,这几种符号用于分割换行：– .. == __.。不废话，上代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">usecase UC1 as &quot;You can use</span><br><span class="line">several lines to define your usecase.</span><br><span class="line">You can also use separators.</span><br><span class="line">--</span><br><span class="line">Several separators are possible.</span><br><span class="line">&#x3D;&#x3D;</span><br><span class="line">And you can add titles:</span><br><span class="line">..Conclusion..</span><br><span class="line">This allows large description.&quot;</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase3.png" alt=""><br> </center></p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>使用符号(&lt;|–)来表示用例或者角色的扩展或者继承。<br>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">:Main Admin: as Admin</span><br><span class="line">(Use the application) as (Use)</span><br><span class="line">User &lt;|-- Admin</span><br><span class="line">(Start) &lt;|-- (Use)</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果如下:<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase4.png" alt=""><br> </center></p>
+<h4 id="使用注释"><a href="#使用注释" class="headerlink" title="使用注释"></a>使用注释</h4><p>可以使用（note left of , note right of , note top of , note bottom of）这些关键字来定义注释或者标注。<br>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">:Main Admin: as Admin</span><br><span class="line">(Use the application) as (Use)</span><br><span class="line">User -&gt; (Start)</span><br><span class="line">User --&gt; (Use)</span><br><span class="line">Admin ---&gt; (Use)</span><br><span class="line">note right of Admin : This is an example.</span><br><span class="line">note right of (Use)</span><br><span class="line">A note can also</span><br><span class="line">be on several lines</span><br><span class="line">end note</span><br><span class="line">note &quot;This note is connected\nto several objects.&quot; as N2</span><br><span class="line">(Start) .. N2</span><br><span class="line">N2 .. (Use)</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果如下：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase5.png" alt=""><br> </center></p>
+<h4 id="使用皮肤参数"><a href="#使用皮肤参数" class="headerlink" title="使用皮肤参数"></a>使用皮肤参数</h4><p>skinparam命令能够改变绘画的颜色，字体等信息。<br>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam handwritten true</span><br><span class="line"></span><br><span class="line">skinparam actor &#123;</span><br><span class="line">	BorderColor black</span><br><span class="line">	FontName Courier</span><br><span class="line">	    BackgroundColor&lt;&lt; Human &gt;&gt; Gold</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">skinparam usecase &#123;</span><br><span class="line">	BackgroundColor DarkSeaGreen</span><br><span class="line">	BorderColor DarkSlateGray</span><br><span class="line"></span><br><span class="line">	BackgroundColor&lt;&lt; Main &gt;&gt; YellowGreen</span><br><span class="line">	BorderColor&lt;&lt; Main &gt;&gt; YellowGreen</span><br><span class="line">	</span><br><span class="line">	ArrowColor Olive</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">User &lt;&lt; Human &gt;&gt;</span><br><span class="line">:Main Database: as MySql &lt;&lt; Application &gt;&gt;</span><br><span class="line">(Start) &lt;&lt; One Shot &gt;&gt;</span><br><span class="line">(Use the application) as (Use) &lt;&lt; Main &gt;&gt;</span><br><span class="line"></span><br><span class="line">User -&gt; (Start)</span><br><span class="line">User --&gt; (Use)</span><br><span class="line"></span><br><span class="line">MySql --&gt; (Use)</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果如下：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/usecase6.png" alt=""><br> </center></p>
+<p>关于skinparam，完整的信息请参考<a href="http://plantuml.com/skinparam" target="_blank" rel="noopener">官方网址</a>。</p>
+<h2 id="活动图-流程图-举例"><a href="#活动图-流程图-举例" class="headerlink" title="活动图(流程图)举例"></a>活动图(流程图)举例</h2><p>plantUML支持两种语法来描述活动图，旧的方式（官方手册第4章 Activity Diagram）更传统，更稳定，已经使用了好久了，但是描述不直观，语法稍显复杂，生成的图不够漂亮。鉴于此，只推荐新的方式，就是官方手册中第5章（Activity Diagram (beta)），尽管写着beta版，我使用新版本时还没有碰到任何问题，实际表现相当稳定，强烈推荐新的活动图描述语法。</p>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><p>活动标签以冒号(:)开始，分号(;)结尾。</p>
+<h3 id="开始-结束"><a href="#开始-结束" class="headerlink" title="开始/结束"></a>开始/结束</h3><p>关键字<strong>start</strong>表示活动图开始，关键字<strong>stop</strong>表示活动图停止，关键字<strong>end</strong>表示活动图结束。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">start</span><br><span class="line">:Hello world;</span><br><span class="line">:This is on defined on</span><br><span class="line">several **lines**;</span><br><span class="line">stop</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity1.png" alt=""><br> </center></p>
+<h3 id="条件与循环"><a href="#条件与循环" class="headerlink" title="条件与循环"></a>条件与循环</h3><p>活动图表示条件的几个关键字:if, then, else, elseif, endif。条件需要使用()括起来。<br>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">start</span><br><span class="line">if (condition A) then (yes)</span><br><span class="line">	:Text 1;</span><br><span class="line">elseif (condition B) then (yes)</span><br><span class="line">	:Text 2;</span><br><span class="line">	end</span><br><span class="line">elseif (condition C) then (yes)</span><br><span class="line">	:Text 3;</span><br><span class="line">elseif (condition D) then (yes)</span><br><span class="line">	:Text 4;</span><br><span class="line">else (nothing)</span><br><span class="line">	:Text else;</span><br><span class="line">endif</span><br><span class="line">stop</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>效果：<br> <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity2.png" alt=""><br> </center></p>
+<p> while循环的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">while (check filesize ?) is (not empty)</span><br><span class="line">	:read file;</span><br><span class="line">endwhile (empty)</span><br><span class="line">:close file;</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p> 效果：<br>  <center><br> <img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity3.png" alt=""><br> </center></p>
+<h2 id="常用的设置选项"><a href="#常用的设置选项" class="headerlink" title="常用的设置选项"></a>常用的设置选项</h2><h3 id="更改图片的清晰度"><a href="#更改图片的清晰度" class="headerlink" title="更改图片的清晰度"></a>更改图片的清晰度</h3><p>默认的dpi非常低，导致图片很模糊，通过设置dpi可以大幅度提高图片清晰度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line">skinparam dpi 300</span><br><span class="line">while (check filesize ?) is (not empty)</span><br><span class="line">	:read file;</span><br><span class="line">endwhile (empty)</span><br><span class="line">:close file;</span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>同样是上面循环的例子，感受一下效果：<br><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/plantuml/activity4.png" alt=""></p>
+<h3 id="plantUML的skinparam"><a href="#plantUML的skinparam" class="headerlink" title="plantUML的skinparam"></a>plantUML的skinparam</h3><p>dpi是graphviz的参数设置，关于plantUML特有的skinparam参数，完整的信息请参考<a href="http://plantuml.com/skinparam" target="_blank" rel="noopener">官方网址</a>。主要能设置字体，背景等信息。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p>本文档很大程度上参考了以下文档，向作者表示感谢！<br><a href="https://www.jianshu.com/p/e92a52770832" target="_blank" rel="noopener">https://www.jianshu.com/p/e92a52770832</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PlantUML/" rel="tag"># PlantUML</a>
+          
+            <a href="/tags/%E6%B5%81%E7%A8%8B%E5%9B%BE/" rel="tag"># 流程图</a>
+          
+            <a href="/tags/%E5%BA%8F%E5%88%97%E5%9B%BE/" rel="tag"># 序列图</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/SpringBoot(1)%20%E2%80%93%20CommandLineRunner%E6%8E%A5%E5%8F%A3/" rel="next" title="SpringBoot(1) – CommandLineRunner接口">
+                <i class="fa fa-chevron-left"></i> SpringBoot(1) – CommandLineRunner接口
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/23/Java%20Stream--(1)%E7%AE%80%E4%BB%8B%E5%8F%8A%E5%88%9B%E5%BB%BA%E6%96%B9%E6%B3%95/" rel="prev" title="Java Stream--(1)简介及创建方法">
+                Java Stream--(1)简介及创建方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是-PlantUML"><span class="nav-number">1.</span> <span class="nav-text">什么是 PlantUML</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装与配置（下面例子以MacOS为例说明）"><span class="nav-number">2.</span> <span class="nav-text">软件安装与配置（下面例子以MacOS为例说明）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Sublime"><span class="nav-number">2.1.</span> <span class="nav-text">Sublime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graphviz"><span class="nav-number">2.2.</span> <span class="nav-text">graphviz</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PlantUML-for-Sublime-插件"><span class="nav-number">2.3.</span> <span class="nav-text">PlantUML for Sublime 插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看效果"><span class="nav-number">2.4.</span> <span class="nav-text">查看效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PlantULM-快速入门"><span class="nav-number">3.</span> <span class="nav-text">PlantULM 快速入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#时序图举例"><span class="nav-number">3.1.</span> <span class="nav-text">时序图举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样例代码"><span class="nav-number">3.1.1.</span> <span class="nav-text">样例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果预览"><span class="nav-number">3.1.2.</span> <span class="nav-text">效果预览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时序图关键元素说明"><span class="nav-number">3.1.3.</span> <span class="nav-text">时序图关键元素说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#时序图标题"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">时序图标题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象（Object）"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">对象（Object）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时序图中Actor（角色）元素"><span class="nav-number">3.1.3.3.</span> <span class="nav-text">时序图中Actor（角色）元素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生命线（Lifeline）"><span class="nav-number">3.1.3.4.</span> <span class="nav-text">生命线（Lifeline）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#控制焦点或者生命线激活（Focus-of-Control-or-Activation）"><span class="nav-number">3.1.3.5.</span> <span class="nav-text">控制焦点或者生命线激活（Focus of Control or Activation）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息（Message）"><span class="nav-number">3.1.3.6.</span> <span class="nav-text">消息（Message）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用例图举例"><span class="nav-number">3.2.</span> <span class="nav-text">用例图举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#样例代码-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">样例代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单解释"><span class="nav-number">3.2.2.</span> <span class="nav-text">简单解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用例"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">用例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#角色"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用例描述"><span class="nav-number">3.2.2.3.</span> <span class="nav-text">用例描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展"><span class="nav-number">3.2.2.4.</span> <span class="nav-text">扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用注释"><span class="nav-number">3.2.2.5.</span> <span class="nav-text">使用注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用皮肤参数"><span class="nav-number">3.2.2.6.</span> <span class="nav-text">使用皮肤参数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#活动图-流程图-举例"><span class="nav-number">3.3.</span> <span class="nav-text">活动图(流程图)举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础"><span class="nav-number">3.3.1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始-结束"><span class="nav-number">3.3.2.</span> <span class="nav-text">开始&#x2F;结束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件与循环"><span class="nav-number">3.3.3.</span> <span class="nav-text">条件与循环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用的设置选项"><span class="nav-number">3.4.</span> <span class="nav-text">常用的设置选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更改图片的清晰度"><span class="nav-number">3.4.1.</span> <span class="nav-text">更改图片的清晰度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plantUML的skinparam"><span class="nav-number">3.4.2.</span> <span class="nav-text">plantUML的skinparam</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">3.5.</span> <span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

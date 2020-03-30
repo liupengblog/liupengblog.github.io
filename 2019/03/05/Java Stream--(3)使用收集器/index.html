@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Java8,ModernJava,Stream," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Java8一般通过称为流水线(pipeline)的中间操作(intermediate operation)来传递流元素，并在到达终端操作(terminal operation)后结束。Stream接口定义的collect方法就是一种终端操作，用于将流转换为集合。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Stream--(3)使用收集器">
+<meta property="og:url" content="http://yoursite.com/2019/03/05/Java%20Stream--(3)%E4%BD%BF%E7%94%A8%E6%94%B6%E9%9B%86%E5%99%A8/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="Java8一般通过称为流水线(pipeline)的中间操作(intermediate operation)来传递流元素，并在到达终端操作(terminal operation)后结束。Stream接口定义的collect方法就是一种终端操作，用于将流转换为集合。">
+<meta property="og:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream1.jpg">
+<meta property="article:published_time" content="2019-03-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-03-10T03:02:23.781Z">
+<meta property="article:author" content="Sptan">
+<meta property="article:tag" content="Java8">
+<meta property="article:tag" content="ModernJava">
+<meta property="article:tag" content="Stream">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/05/Java Stream--(3)使用收集器/"/>
+
+
+
+
+
+  <title>Java Stream--(3)使用收集器 | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/05/Java%20Stream--(3)%E4%BD%BF%E7%94%A8%E6%94%B6%E9%9B%86%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java Stream--(3)使用收集器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-05T00:00:00+08:00">
+                2019-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Modern-Java/" itemprop="url" rel="index">
+                    <span itemprop="name">ModernJava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://sptan-pic.oss-cn-shanghai.aliyuncs.com/javastream/stream1.jpg" alt=""><br>Java8一般通过称为流水线(pipeline)的中间操作(intermediate operation)来传递流元素，并在到达终端操作(terminal operation)后结束。Stream接口定义的collect方法就是一种终端操作，用于将流转换为集合。</p>
+<a id="more"></a>
+<h1 id="将Stream转化为集合"><a href="#将Stream转化为集合" class="headerlink" title="将Stream转化为集合"></a>将Stream转化为集合</h1><h2 id="单参数形式转化为集合"><a href="#单参数形式转化为集合" class="headerlink" title="单参数形式转化为集合"></a>单参数形式转化为集合</h2><p>collect方法有两种重载形式,单参数形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * 对Stream中的元素使用收集器执行可变规约操作。</span><br><span class="line"> * 这是个终端操作。</span><br><span class="line"> * 下面这个例子将字符串依次添加到一个ArrayList中。</span><br><span class="line"> * List&lt;String&gt; asList &#x3D; stringStream.collect(Collectors.toList());</span><br><span class="line"> * 下面这个例子根据城市对Person进行分组：</span><br><span class="line"> * Map&lt;String, List&lt;Person&gt;&gt; peopleByCity</span><br><span class="line"> *            &#x3D; </span><br><span class="line"> *   personStream.collect(Collectors.groupingBy(Person::getCity));</span><br><span class="line"> * 下面这个例子根据Person的state和city进行两级分组：</span><br><span class="line"> * Map&lt;String, Map&lt;String, List&lt;Person&gt;&gt;&gt; peopleByStateAndCity</span><br><span class="line"> *   &#x3D; personStream.collect(Collectors.groupingBy(Person::getState,</span><br><span class="line"> *                          Collectors.groupingBy(Person::getCity)));</span><br><span class="line"> * @param &lt;R&gt; 结果类型</span><br><span class="line"> * @param &lt;A&gt; 累加器</span><br><span class="line"> * @param collector 收集器</span><br><span class="line"> * @return 规约结果 </span><br><span class="line"> *&#x2F;</span><br><span class="line">&lt;R, A&gt; R collect(Collector&lt;? super T, A, R&gt; collector);</span><br></pre></td></tr></table></figure>
+<p>Collector&lt;? super T, A, R&gt; collector这个看着有点晕，这就是传说中的收集器，是本章中要说明的对象，这篇文章中会慢慢试图把它讲清楚。<br>先看最简单的应用的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToList1() &#123;</span><br><span class="line">    List&lt;String&gt; superHeros &#x3D;</span><br><span class="line">        Stream.of(&quot;Mr. Furious&quot;, &quot;The Blue Raja&quot;, &quot;The Shoveler&quot;, &quot;The Bowler&quot;)</span><br><span class="line">            .collect(Collectors.toList());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子虽然简单，但是进一步探究，会是我们深入理解收集器的钥匙。<br>对于单参数形式Stream.collect方法，参数是Collector&lt;? super T, A, R&gt;类型的收集器，所以Collectors.toList()一定会是一个返回结果类型为Collector&lt;? super T, A, R&gt;的静态函数，我们看看Collectors.toList()的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt;</span><br><span class="line">Collector&lt;T, ?, List&lt;T&gt;&gt; toList() &#123;</span><br><span class="line">    return new CollectorImpl&lt;&gt;((Supplier&lt;List&lt;T&gt;&gt;) ArrayList::new, List::add,</span><br><span class="line">                                   (left, right) -&gt; &#123; left.addAll(right); return left; &#125;,</span><br><span class="line">                               CH_ID);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看上去还是挺复杂，CollectorImpl的构造函数有四个参数，四个参数全是函数类型。基本上5个函数就可以确定收集器的实现方式，这里出现了四个：<br>第一个参数是一个Supplier，简单说就是集合容器的构造器；<br>第二个参数称为累加器(accumulator)，描述了怎么讲元素添加到集合容器中；<br>第三个参数被称作合并器(combiner),用于合并两个累加器容器，这个合并器主要在并行操作流时合并集合的；<br>第四个参数是一个特性选择器函数，特性选择是一个枚举类型：Collector.Characteristics，有三个取值项，分别表示并行优化(CONCURRENT)，无需排序(UNORDERED)和直接返回参数(IDENTITY_FINISH)。<br>对照CollectorImpl实现，可以看出Collectors.toList()的逻辑是相当简单的：new一个ArrayList，把Stream中的元素挨着加进去。不过由于参数都是行为(函数)，代码看上去不如传统的java代码直观。<br>可以想象，toSet方法转化集合，也是类似的实现方式，这里有个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToSet1() &#123;</span><br><span class="line">    Set&lt;String&gt; superHeros &#x3D;</span><br><span class="line">        Stream.of(&quot;Mr. Furious&quot;, &quot;The Blue Raja&quot;, &quot;The Shoveler&quot;, &quot;The Bowler&quot;)</span><br><span class="line">            .collect(Collectors.toSet());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有Map的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">private List&lt;Emp&gt; list &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">@Before</span><br><span class="line">public void init() &#123;</span><br><span class="line">    list.add(new Emp(&quot;YuanGong1&quot;, 20, 1000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong2&quot;, 25, 2000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong3&quot;, 30, 3000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong4&quot;, 35, 4000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong5&quot;, 38, 5000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong6&quot;, 45, 9000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong7&quot;, 55, 10000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong8&quot;, 42, 15000));</span><br><span class="line">    list.add(new Emp(&quot;YuanGong1&quot;, 20, 1000));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Test</span><br><span class="line">public void testToMap1() &#123;</span><br><span class="line">    Map&lt;String, Integer&gt; empMap &#x3D;</span><br><span class="line">        list.stream()</span><br><span class="line">            .collect(Collectors.toMap(Emp::getName, Emp::getAge));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Emp::getName是生成键值所用的函数，Emp::getAge是生成Map的value所用的函数。</p>
+<h2 id="三参数形式转化为集合"><a href="#三参数形式转化为集合" class="headerlink" title="三参数形式转化为集合"></a>三参数形式转化为集合</h2><p>经过上面对单参数转化为集合分析后，其实三参数形式非常容易理解。<br>先看三参数重载形式的签名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;R&gt; R collect(Supplier&lt;R&gt; supplier,</span><br><span class="line">              BiConsumer&lt;R, ? super T&gt; accumulator,</span><br><span class="line">              BiConsumer&lt;R, R&gt; combiner);</span><br></pre></td></tr></table></figure>
+<p>三参数形式虽然参数多，但是实际比单参数形式更简单。很明显第一个参数supplier为结果存放容器,第二个参数accumulator为结果如何添加到容器的操作,第三个参数combiner则为多个容器的聚合策略。<br>下面这个例子看上去很无聊，但是很好的说明了三参数收集器的用法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testCollectThreeParams() &#123;</span><br><span class="line">    ArrayList&lt;Integer&gt; list &#x3D; Stream.of(1, 2, 3, 4, 5)</span><br><span class="line">        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);</span><br><span class="line">    Stream.of(list).forEach(System.out::println);&#x2F;&#x2F;[1, 2, 3, 4, 5]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="转化为数组"><a href="#转化为数组" class="headerlink" title="转化为数组"></a>转化为数组</h2><p>Stream接口还定义了用于创建对象数组的方法toArray，它有两种重载形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object[] toArray();</span><br><span class="line">&lt;A&gt; A[] toArray(IntFunction&lt;A[]&gt; generator);</span><br></pre></td></tr></table></figure>
+<p>第一种形式返回一个包含流元素的数组，但未指定类型。<br>第二种形式传入一个函数并生成所需类型的新数组，数组的长度与流相同，很容易与数组构造函数引用一起使用。这种重载形式的参数是IntFunction&lt;A[]&gt;，即指定了返回的数组类型，也限定了数组的长度，数组长度即流元素的元素个数，如果强行指定一个与数组元素不一致的长度，会出现运行时错误。下面是一些例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToArray1() &#123;</span><br><span class="line">    &#x2F;&#x2F;使用Object[] toArray()的例子</span><br><span class="line">    Object[]  objs &#x3D; Stream.of(&quot;The Waffler&quot;, &quot;Reverse&quot;, &quot;PMS&quot;)</span><br><span class="line">        .toArray();</span><br><span class="line">    System.out.println(objs.length);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;&lt;A&gt; A[] toArray(IntFunction&lt;A[]&gt; generator)的例子</span><br><span class="line">    String[] wannabes &#x3D; Stream.of(&quot;The Waffler&quot;, &quot;Reverse&quot;, &quot;PMS&quot;)</span><br><span class="line">        .toArray(String[]::new);</span><br><span class="line">    System.out.println(wannabes.length);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;&lt;A&gt; A[] toArray(IntFunction&lt;A[]&gt; generator)的例子</span><br><span class="line">    String[]  wannabes2 &#x3D; Stream.of(&quot;The Waffler&quot;, &quot;Reverse&quot;, &quot;PMS&quot;)</span><br><span class="line">        .toArray(len -&gt; new String[len]);</span><br><span class="line">    System.out.println(wannabes2.length);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;数组长度限定为2，会出现运行时错误</span><br><span class="line">    String[]  wannabes3 &#x3D; Stream.of(&quot;The Waffler&quot;, &quot;Reverse&quot;, &quot;PMS&quot;)</span><br><span class="line">        .toArray(len -&gt; new String[2]);</span><br><span class="line">    System.out.println(wannabes2.length);</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;数组长度限定为4，会出现运行时错误</span><br><span class="line">    String[]  wannabes4 &#x3D; Stream.of(&quot;The Waffler&quot;, &quot;Reverse&quot;, &quot;PMS&quot;)</span><br><span class="line">        .toArray(len -&gt; new String[4]);</span><br><span class="line">    System.out.println(wannabes2.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="转化为Map"><a href="#转化为Map" class="headerlink" title="转化为Map"></a>转化为Map</h2><p>为了将流转化为Map，Collectors.toMap需要传入两个Function实例，分别用于获取键和值。<br>下面的例子以一个包装了name和role的Actor POJO为例进行讨论。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToMap() &#123;</span><br><span class="line">    Set&lt;Actor&gt; actors &#x3D; Stream.of(</span><br><span class="line">        new Actor(&quot;李连杰&quot;, &quot;霍元甲&quot;),</span><br><span class="line">        new Actor(&quot;孙俪&quot;, &quot;盲女&quot;))</span><br><span class="line">        .collect(Collectors.toSet());</span><br><span class="line">    Map&lt;String, String&gt; actorMap &#x3D; actors.stream()</span><br><span class="line">        .collect(Collectors.toMap(Actor::getName, Actor::getRole));</span><br><span class="line">    actorMap.forEach((key, value) -&gt; System.out.printf(&quot;%s 扮演 %s%n&quot;, key, value));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述例子的打印结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">李连杰 扮演 霍元甲</span><br><span class="line">孙俪 扮演 盲女</span><br></pre></td></tr></table></figure>
+<p>如果对例子稍作修改，toMap换位Collectors.toConcurrenMap,就会生成ConcurrentMap。</p>
+<h1 id="将线性集合添加到Map"><a href="#将线性集合添加到Map" class="headerlink" title="将线性集合添加到Map"></a>将线性集合添加到Map</h1><p>如果不是像前面的例子那样以POJO属性作为键和值，如果键为某种对象属性，值为对象本身，需要怎么做呢？<br>仍旧使用上面的例子，仍旧是toMap方法，下面是两种可选的实现方式:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testToMap2() &#123;</span><br><span class="line">    Set&lt;Actor&gt; actors &#x3D; Stream.of(</span><br><span class="line">        new Actor(&quot;李连杰&quot;, &quot;霍元甲&quot;),</span><br><span class="line">        new Actor(&quot;孙俪&quot;, &quot;盲女&quot;))</span><br><span class="line">        .collect(Collectors.toSet());</span><br><span class="line">    &#x2F;&#x2F;使用lambda表达式t -&gt; t：给定一个元素并返回</span><br><span class="line">    Map&lt;String, Actor&gt; actorMap1 &#x3D; actors.stream()</span><br><span class="line">        .collect(Collectors.toMap(Actor::getName, t -&gt; t));</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F;使用静态方法Function.identity()</span><br><span class="line">    Map&lt;String, Actor&gt; actorMap2 &#x3D; actors.stream()</span><br><span class="line">        .collect(Collectors.toMap(Actor::getName, Function.identity()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="对Map进行排序"><a href="#对Map进行排序" class="headerlink" title="对Map进行排序"></a>对Map进行排序</h1><p>Map接口始终包含一个称谓Map.Entry的公共静态内部接口，它表示一个键值对。Map接口定义的entrySet方法返回Map.Entry元素的Set。getKey和getValue是Map.Entry接口两种最常用的方法，二者分别返回与每个条目对应的建和值。<br>Java8之后，Map.Entry接口引入了一些新的静态方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;返回一个比较器，根据键的自然顺序比较Map.Entry</span><br><span class="line">static &lt;K extends Comparable&lt;? super K&gt;, V&gt; Comparator&lt;Map.Entry&lt;K,V&gt;&gt; comparingByKey();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;返回一个比较器，根据键的指定比较器顺序比较Map.Entry</span><br><span class="line">static &lt;K, V&gt; Comparator&lt;Map.Entry&lt;K, V&gt;&gt; comparingByKey(Comparator&lt;? super K&gt; cmp);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;返回一个比较器，根据值的自然顺序比较Map.Entry</span><br><span class="line">static &lt;K, V extends Comparable&lt;? super V&gt;&gt; Comparator&lt;Map.Entry&lt;K,V&gt;&gt; comparingByValue();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;返回一个比较器，根据值的指定比较器顺序比较Map.Entry</span><br><span class="line">static &lt;K, V&gt; Comparator&lt;Map.Entry&lt;K, V&gt;&gt; comparingByValue(Comparator&lt;? super V&gt; cmp);</span><br></pre></td></tr></table></figure>
+<p>每种类Unix系统（MacOS系统也有）都有一个系统文件：/usr/share/dict/words，这个文件收录了第二版韦氏词典的所有单词，每个单词在文件中占据一行。我们的目标是从这个文件中找出所有单词的单词长度并统计每种单词长度有多少个单词。结果太多，我们只考察长度大于20的单词长度。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testSortMap() &#123;</span><br><span class="line">    Path path &#x3D; Paths.get(&quot;&#x2F;usr&#x2F;share&#x2F;dict&#x2F;words&quot;);</span><br><span class="line">    System.out.println(&quot;单词长度 \t 单词个数&quot;);</span><br><span class="line">    try (Stream&lt;String&gt; lines &#x3D; Files.lines(path)) &#123;</span><br><span class="line">        lines.filter(s -&gt; s.length() &gt; 20)</span><br><span class="line">            .collect(Collectors.groupingBy(String::length, Collectors.counting()))</span><br><span class="line">            .forEach((len, num) -&gt; System.out.printf(&quot;%d:\t\t %d%n&quot;, len, num));</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码简单解释如下：</p>
+<h2 id="文件读取"><a href="#文件读取" class="headerlink" title="文件读取"></a>文件读取</h2><p>文件在try-with-resources代码块内读取，Stream接口实现了AutoCloseabe，try代码块执行完毕后，Java对Stream调用close方法，然后对File调用close方法，从而释放文件资源；</p>
+<h2 id="groupingBy分组"><a href="#groupingBy分组" class="headerlink" title="groupingBy分组"></a>groupingBy分组</h2><p>Collectors.groupingBy方法传入Fucntion作为第一个参数，表示分类器，我们上述例子中，每个单词的长度作为分类器。<br>如果Collectors.groupingBy只传入一个参数，那么Collectors.groupingBy的结果类型为Map，分类器的值作为这个Map的键，匹配分类器的元素列表作为Map的值。我们上面的例子中，如果只传入String::length作为Collectors.groupingBy参数的话，返回的结果类型就是Map&lt;Integer, List<String>&gt;。</p>
+<h2 id="下游收集器"><a href="#下游收集器" class="headerlink" title="下游收集器"></a>下游收集器</h2><p>本例中，双参数形式的Collectors.groupingBy方法第二个参数是另一个收集器，被称为下游收集器(downstream collector)，用于对单词列表进行后期处理。我们例子中的情况下，Collectors.groupingBy返回的类型是Map&lt;Integer,Long&gt;，其中键是单词长度，值是词典中该长度的单词数量。</p>
+<p>我们例子的输出结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">单词长度     单词个数</span><br><span class="line">21:      82</span><br><span class="line">22:      41</span><br><span class="line">23:      17</span><br><span class="line">24:      5</span><br></pre></td></tr></table></figure>
+<p>从结果中看出，是按照单词长度的升序打印的结果，如果希望按照降序打印，我们需要使用Map.Entry.comparingByKey来进行排序。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testSortMap2() &#123;</span><br><span class="line">    Path path &#x3D; Paths.get(&quot;&#x2F;usr&#x2F;share&#x2F;dict&#x2F;words&quot;);</span><br><span class="line">    System.out.println(&quot;单词长度 \t 单词个数&quot;);</span><br><span class="line">    try (Stream&lt;String&gt; lines &#x3D; Files.lines(path, Charset.defaultCharset())) &#123;</span><br><span class="line">        Map&lt;Integer, Long&gt; map &#x3D; lines.filter(s -&gt; s.length() &gt; 20)</span><br><span class="line">            .collect(Collectors.groupingBy(String::length, Collectors.counting()));</span><br><span class="line">        map.entrySet().stream()</span><br><span class="line">            .sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))</span><br><span class="line">            .forEach(e -&gt; System.out.printf(&quot;单词长度 %d:\t单词个数 %d%n&quot;, e.getKey(), e.getValue()));</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>返回Map&lt;Integer, Long&gt; 之后，程序提取entrySet流，调用Stream.sorted方法对流进行排序，排序依据是sorted的参数：Map.Entry.comparingByKey(Comparator.reverseOrder())，本例中使用自然顺序的逆序进行排序。</p>
+<p>注：如果排序结果符合Comparable.compareTo的结果，就可以称为“自然顺序”。</p>
+<p>Map.Entry.comparingByValue与Map.Entry.comparingByKey的使用类似。</p>
+<h1 id="划分-Partitioning"><a href="#划分-Partitioning" class="headerlink" title="划分(Partitioning)"></a>划分(Partitioning)</h1><p>Collectors.partitioningBy将Stream中的元素拆分为两部分：满足参数中Predicate与不满足Predicate的两类。<br>Collectors.partitioningBy有两种重载形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">static &lt;T&gt;</span><br><span class="line">    Collector&lt;T, ?, Map&lt;Boolean, List&lt;T&gt;&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate);</span><br><span class="line"></span><br><span class="line">static &lt;T, D, A&gt;</span><br><span class="line">    Collector&lt;T, ?, Map&lt;Boolean, D&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate,</span><br><span class="line">                                                    Collector&lt;? super T, A, D&gt; downstream);</span><br></pre></td></tr></table></figure>
+<p>第一种形式传入单个的Predicate参数，它将元素划分为满足Predicate和不满足Predicate的两类。会得到一个恰好包含两个条目的Map，其中一个值列表满足Predicate，另一个不满足Predicate。<br>第二种重载形式传入Collector作为第二个参数，这个Collector被称为下游收集器。下游收集器对返回的列表进行后期处理。下游收集器后续讨论。<br>下面的例子把字符串列表按照偶数长度和奇数长度划分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testPartitioningBy1() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Arrays.asList(&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;long&quot;, &quot;list&quot;, &quot;of&quot;,</span><br><span class="line">        &quot;strings&quot;, &quot;to&quot;, &quot;use&quot;, &quot;as&quot;, &quot;a&quot;, &quot;demo&quot;);</span><br><span class="line">    Map&lt;Boolean, List&lt;String&gt;&gt; lengthMap &#x3D; strings.stream()</span><br><span class="line">        .collect(Collectors.partitioningBy(s -&gt; s.length() % 2 &#x3D;&#x3D; 0));</span><br><span class="line">    lengthMap.forEach((key,value) -&gt; System.out.printf(&quot;%5s: %s%n&quot;, key, value));</span><br><span class="line">    &#x2F;&#x2F;输出结果如下:</span><br><span class="line">    &#x2F;&#x2F;false: [a, strings, use, a]</span><br><span class="line">    &#x2F;&#x2F; true: [this, is, long, list, of, to, as, demo]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="分组-Grouping"><a href="#分组-Grouping" class="headerlink" title="分组(Grouping)"></a>分组(Grouping)</h1><p>Collectors.partitioningBy将元素按照Predicate匹配结果划分Stream，Collectors.groupingBy则在一定程度上相当于SQL中group by。它有几种重载形式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;1:仅分类器作为参数</span><br><span class="line">static &lt;T, K&gt; Collector&lt;T, ?, Map&lt;K, List&lt;T&gt;&gt;&gt;</span><br><span class="line">    groupingBy(Function&lt;? super T, ? extends K&gt; classifier);</span><br><span class="line">&#x2F;&#x2F;2:分类器和下游收集器作为参数</span><br><span class="line">static &lt;T, K, A, D&gt;</span><br><span class="line">    Collector&lt;T, ?, Map&lt;K, D&gt;&gt; groupingBy(Function&lt;? super T, ? extends K&gt; classifier,</span><br><span class="line">                                          Collector&lt;? super T, A, D&gt; downstream);</span><br><span class="line">                                          </span><br><span class="line">&#x2F;&#x2F;3:分类器、下游收集器和map工厂作为参数</span><br><span class="line">static &lt;T, K, D, A, M extends Map&lt;K, D&gt;&gt;</span><br><span class="line">    Collector&lt;T, ?, M&gt; groupingBy(Function&lt;? super T, ? extends K&gt; classifier,</span><br><span class="line">                                  Supplier&lt;M&gt; mapFactory,</span><br><span class="line">                                  Collector&lt;? super T, A, D&gt; downstream);</span><br></pre></td></tr></table></figure>
+<p>由于大量的泛型和函数类型的使用，定义看上去比较复杂，下面会以一个字符串列表为例说明各种可能的用法。不过，我们总是要提供指定元素的某个属性，作为分类器。<br>为了保持代码适当简短，对Collectors.groupingBy等方法做了静态引用。</p>
+<h2 id="根据字符串长度进行分组"><a href="#根据字符串长度进行分组" class="headerlink" title="根据字符串长度进行分组"></a>根据字符串长度进行分组</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy1() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(Collectors.toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, List&lt;String&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[bb, cc], 3&#x3D;[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组到具体的Map实现"><a href="#分组到具体的Map实现" class="headerlink" title="分组到具体的Map实现"></a>分组到具体的Map实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy2() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;cc&quot;, &quot;bb&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    TreeMap&lt;Integer, List&lt;String&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, TreeMap::new, toList()));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[cc, bb], 3&#x3D;[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="提供一个下游收集器"><a href="#提供一个下游收集器" class="headerlink" title="提供一个下游收集器"></a>提供一个下游收集器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy3() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;cc&quot;, &quot;bb&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, TreeSet&lt;String&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, toCollection(TreeSet::new)));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[bb, cc], 3&#x3D;[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="对分组结果进行计数"><a href="#对分组结果进行计数" class="headerlink" title="对分组结果进行计数"></a>对分组结果进行计数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy4() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;cc&quot;, &quot;bb&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, Long&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, counting()));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;1, 2&#x3D;2, 3&#x3D;1&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组并将个分组结果中的元素连接成字符串"><a href="#分组并将个分组结果中的元素连接成字符串" class="headerlink" title="分组并将个分组结果中的元素连接成字符串"></a>分组并将个分组结果中的元素连接成字符串</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy5() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;cc&quot;, &quot;bb&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, String&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, joining(&quot;,&quot;, &quot;[&quot;, &quot;]&quot;)));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[bb,cc], 3&#x3D;[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后过滤分组结果-Collectors-filtering从java9才开始引入"><a href="#分组后过滤分组结果-Collectors-filtering从java9才开始引入" class="headerlink" title="分组后过滤分组结果(Collectors.filtering从java9才开始引入)"></a>分组后过滤分组结果(Collectors.filtering从java9才开始引入)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy6() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, List&lt;String&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, </span><br><span class="line">            filtering(s -&gt; !s.contains(&quot;c&quot;), toList())));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[bb], 3&#x3D;[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后计算每组中均值"><a href="#分组后计算每组中均值" class="headerlink" title="分组后计算每组中均值"></a>分组后计算每组中均值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy7() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, Double&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, averagingInt(String::hashCode)));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;97.0, 2&#x3D;3152.0, 3&#x3D;99300.0&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后求和"><a href="#分组后求和" class="headerlink" title="分组后求和"></a>分组后求和</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy8() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, Integer&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length, summingInt(String::hashCode)));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;97, 2&#x3D;6304, 3&#x3D;99300&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后计算每组的统计结果"><a href="#分组后计算每组的统计结果" class="headerlink" title="分组后计算每组的统计结果"></a>分组后计算每组的统计结果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy9() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, IntSummaryStatistics&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length,</span><br><span class="line">            summarizingInt(String::hashCode)));</span><br><span class="line"></span><br><span class="line">    System.out.println(JSON.toJSONString(result));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    1: &#123;</span><br><span class="line">        &quot;average&quot;: 97,</span><br><span class="line">        &quot;count&quot;: 1,</span><br><span class="line">        &quot;max&quot;: 97,</span><br><span class="line">        &quot;min&quot;: 97,</span><br><span class="line">        &quot;sum&quot;: 97</span><br><span class="line">    &#125;,</span><br><span class="line">    2: &#123;</span><br><span class="line">        &quot;average&quot;: 3152,</span><br><span class="line">        &quot;count&quot;: 2,</span><br><span class="line">        &quot;max&quot;: 3168,</span><br><span class="line">        &quot;min&quot;: 3136,</span><br><span class="line">        &quot;sum&quot;: 6304</span><br><span class="line">    &#125;,</span><br><span class="line">    3: &#123;</span><br><span class="line">        &quot;average&quot;: 99300,</span><br><span class="line">        &quot;count&quot;: 1,</span><br><span class="line">        &quot;max&quot;: 99300,</span><br><span class="line">        &quot;min&quot;: 99300,</span><br><span class="line">        &quot;sum&quot;: 99300</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后规约"><a href="#分组后规约" class="headerlink" title="分组后规约"></a>分组后规约</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy10() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, List&lt;Character&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .map(toStringList())</span><br><span class="line">        .collect(groupingBy(List::size, </span><br><span class="line">            reducing(List.of(), (l1, l2) -&gt; Stream.concat(l1.stream(), l2.stream())</span><br><span class="line">            .collect(Collectors.toList()))));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;[a], 2&#x3D;[b, b, c, c], 3&#x3D;[d, d, d]&#125;</span><br><span class="line">&#125;</span><br><span class="line">private static Function&lt;String, List&lt;Character&gt;&gt; toStringList() &#123;</span><br><span class="line">    return s -&gt; s.chars().mapToObj(c -&gt; (char) c).collect(toList());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分组后计算最大值-最小值"><a href="#分组后计算最大值-最小值" class="headerlink" title="分组后计算最大值/最小值"></a>分组后计算最大值/最小值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy11() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Stream.of(&quot;a&quot;, &quot;bb&quot;, &quot;cc&quot;, &quot;ddd&quot;)</span><br><span class="line">        .collect(toList());</span><br><span class="line"></span><br><span class="line">    Map&lt;Integer, Optional&lt;String&gt;&gt; result &#x3D; strings.stream()</span><br><span class="line">        .collect(groupingBy(String::length,</span><br><span class="line">            Collectors.maxBy(Comparator.comparing(String::toUpperCase))));</span><br><span class="line"></span><br><span class="line">    System.out.println(result); &#x2F;&#x2F; &#123;1&#x3D;Optional[a], 2&#x3D;Optional[cc], 3&#x3D;Optional[ddd]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="组合下游收集器"><a href="#组合下游收集器" class="headerlink" title="组合下游收集器"></a>组合下游收集器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Test</span><br><span class="line">public void testGroupingBy() &#123;</span><br><span class="line">    List&lt;String&gt; strings &#x3D; Arrays.asList(&quot;this&quot;, &quot;is&quot;, &quot;a&quot;, &quot;long&quot;, &quot;list&quot;, &quot;of&quot;,</span><br><span class="line">            &quot;strings&quot;, &quot;to&quot;, &quot;use&quot;, &quot;as&quot;, &quot;a&quot;, &quot;demo&quot;);</span><br><span class="line">    Map&lt;Integer, List&lt;String&gt;&gt; lengthMap &#x3D; strings.stream()</span><br><span class="line">        .collect(Collectors.groupingBy(String::length));</span><br><span class="line">    lengthMap.forEach((key,value) -&gt; System.out.printf(&quot;%5s: %s%n&quot;, key, value));</span><br><span class="line">    &#x2F;&#x2F;输出结果如下:</span><br><span class="line">    &#x2F;&#x2F;1: [a, a]</span><br><span class="line">    &#x2F;&#x2F;2: [is, of, to, as]</span><br><span class="line">    &#x2F;&#x2F;3: [use]</span><br><span class="line">    &#x2F;&#x2F;4: [this, long, list, demo]</span><br><span class="line">    &#x2F;&#x2F;7: [strings]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="关于下游收集器的补充说明"><a href="#关于下游收集器的补充说明" class="headerlink" title="关于下游收集器的补充说明"></a>关于下游收集器的补充说明</h1><p>上面的例子中我们发现，Collectors.groupingBy、Collectors.partitioningBy和Collectors.flatMapping等方法有一种重载形式的最后一个参数是downstream，这个downstream用于对收集器产生的结果进行二次加工，这就是所谓的下游收集器。这几种重载形式签名如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;groupingBy</span><br><span class="line">static &lt;T, K, A, D&gt;</span><br><span class="line">Collector&lt;T, ?, Map&lt;K, D&gt;&gt; groupingBy(Function&lt;? super T, ? extends K&gt; classifier,</span><br><span class="line">            Collector&lt;? super T, A, D&gt; downstream) </span><br><span class="line">&#x2F;&#x2F;partitioningBy</span><br><span class="line">static &lt;T, D, A&gt;</span><br><span class="line">Collector&lt;T, ?, Map&lt;Boolean, D&gt;&gt; partitioningBy(Predicate&lt;? super T&gt; predicate,</span><br><span class="line">            Collector&lt;? super T, A, D&gt; downstream)</span><br><span class="line">&#x2F;&#x2F;flatMapping</span><br><span class="line">static &lt;T, U, A, R&gt;</span><br><span class="line">Collector&lt;T, ?, R&gt; flatMapping(Function&lt;? super T, ? extends Stream&lt;? extends U&gt;&gt; mapper,</span><br><span class="line">                Collector&lt;? super U, A, R&gt; downstream)</span><br></pre></td></tr></table></figure>
+<p>下游收集器的用途是对于上游操作(如分组或者划分)产生的对象集合进行后期处理。<br>下游收集器本质上还是收集器(Collectors),下游收集器的二次加工操作往往还是对流的操作，所以收集器和Stream的一些方法命名和功能看上去比较像就不奇怪了。下表是Stream定义的一些方法和Collectors类定义的对应关系。</p>
+<table>
+<thead>
+<tr>
+<th>Stream</th>
+<th>Collectors</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>count</td>
+<td>counting</td>
+</tr>
+<tr>
+<td>map</td>
+<td>maping</td>
+</tr>
+<tr>
+<td>min</td>
+<td>minBy</td>
+</tr>
+<tr>
+<td>max</td>
+<td>maxBy</td>
+</tr>
+<tr>
+<td>IntStream.sum</td>
+<td>sumingInt</td>
+</tr>
+<tr>
+<td>LongStream.sum</td>
+<td>sumingLong</td>
+</tr>
+<tr>
+<td>DoubleStream.sum</td>
+<td>sumingDouble</td>
+</tr>
+<tr>
+<td>IntStream.summarizing</td>
+<td>summarizingInt</td>
+</tr>
+<tr>
+<td>LongStream.summarizing</td>
+<td>summarizingLong</td>
+</tr>
+<tr>
+<td>DoubleStream.summarizing</td>
+<td>summarizingDouble</td>
+</tr>
+</tbody></table>
+<p>这篇文章的整理过程中，很大程度参照了《Modern Java Recipes》和<a href="https://4comprehension.com/the-ultimate-guide-to-the-java-stream-api-groupingby-collector/" target="_blank" rel="noopener">Grzegorz Piwowarek的文章</a>，向原作者表示感谢。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java8/" rel="tag"># Java8</a>
+          
+            <a href="/tags/ModernJava/" rel="tag"># ModernJava</a>
+          
+            <a href="/tags/Stream/" rel="tag"># Stream</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/24/Java%20Stream--(2)%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C/" rel="next" title="Java Stream--(2)常用操作">
+                <i class="fa fa-chevron-left"></i> Java Stream--(2)常用操作
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/08/Java%20Stream--(4)%E5%AE%9A%E5%88%B6%E6%94%B6%E9%9B%86%E5%99%A8/" rel="prev" title="Java Stream--(4)定制收集器">
+                Java Stream--(4)定制收集器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#将Stream转化为集合"><span class="nav-number">1.</span> <span class="nav-text">将Stream转化为集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单参数形式转化为集合"><span class="nav-number">1.1.</span> <span class="nav-text">单参数形式转化为集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三参数形式转化为集合"><span class="nav-number">1.2.</span> <span class="nav-text">三参数形式转化为集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转化为数组"><span class="nav-number">1.3.</span> <span class="nav-text">转化为数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转化为Map"><span class="nav-number">1.4.</span> <span class="nav-text">转化为Map</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#将线性集合添加到Map"><span class="nav-number">2.</span> <span class="nav-text">将线性集合添加到Map</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对Map进行排序"><span class="nav-number">3.</span> <span class="nav-text">对Map进行排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件读取"><span class="nav-number">3.1.</span> <span class="nav-text">文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#groupingBy分组"><span class="nav-number">3.2.</span> <span class="nav-text">groupingBy分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下游收集器"><span class="nav-number">3.3.</span> <span class="nav-text">下游收集器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#划分-Partitioning"><span class="nav-number">4.</span> <span class="nav-text">划分(Partitioning)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分组-Grouping"><span class="nav-number">5.</span> <span class="nav-text">分组(Grouping)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根据字符串长度进行分组"><span class="nav-number">5.1.</span> <span class="nav-text">根据字符串长度进行分组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组到具体的Map实现"><span class="nav-number">5.2.</span> <span class="nav-text">分组到具体的Map实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提供一个下游收集器"><span class="nav-number">5.3.</span> <span class="nav-text">提供一个下游收集器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对分组结果进行计数"><span class="nav-number">5.4.</span> <span class="nav-text">对分组结果进行计数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组并将个分组结果中的元素连接成字符串"><span class="nav-number">5.5.</span> <span class="nav-text">分组并将个分组结果中的元素连接成字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后过滤分组结果-Collectors-filtering从java9才开始引入"><span class="nav-number">5.6.</span> <span class="nav-text">分组后过滤分组结果(Collectors.filtering从java9才开始引入)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后计算每组中均值"><span class="nav-number">5.7.</span> <span class="nav-text">分组后计算每组中均值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后求和"><span class="nav-number">5.8.</span> <span class="nav-text">分组后求和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后计算每组的统计结果"><span class="nav-number">5.9.</span> <span class="nav-text">分组后计算每组的统计结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后规约"><span class="nav-number">5.10.</span> <span class="nav-text">分组后规约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分组后计算最大值-最小值"><span class="nav-number">5.11.</span> <span class="nav-text">分组后计算最大值&#x2F;最小值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合下游收集器"><span class="nav-number">5.12.</span> <span class="nav-text">组合下游收集器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于下游收集器的补充说明"><span class="nav-number">6.</span> <span class="nav-text">关于下游收集器的补充说明</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
