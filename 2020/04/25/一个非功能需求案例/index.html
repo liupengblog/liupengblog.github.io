@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="技术方案中非功能需求案例  title: 技术方案中非功能需求案例date: 2020-04-25categories: 方案文档tags:  方案文档 非功能需求   安全业务安全账号安全采用业界主流的安全体系，管理端后台用户和 APP 用户均需要足够的安全性保障，防止用户无意识的信息泄露。 防暴力破解用户账号登录时附带防机器人破解逻辑。 交易安全系统要能够从根本上杜绝一切交易伪造。 网络安全网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个非功能需求案例">
+<meta property="og:url" content="http://yoursite.com/2020/04/25/%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82%E6%A1%88%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="技术方案中非功能需求案例  title: 技术方案中非功能需求案例date: 2020-04-25categories: 方案文档tags:  方案文档 非功能需求   安全业务安全账号安全采用业界主流的安全体系，管理端后台用户和 APP 用户均需要足够的安全性保障，防止用户无意识的信息泄露。 防暴力破解用户账号登录时附带防机器人破解逻辑。 交易安全系统要能够从根本上杜绝一切交易伪造。 网络安全网">
+<meta property="article:published_time" content="2020-04-25T13:48:59.731Z">
+<meta property="article:modified_time" content="2020-04-25T13:50:33.059Z">
+<meta property="article:author" content="Sptan">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/25/一个非功能需求案例/"/>
+
+
+
+
+
+  <title>一个非功能需求案例 | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/25/%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82%E6%A1%88%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一个非功能需求案例</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-25T21:48:59+08:00">
+                2020-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>技术方案中非功能需求案例</p>
+<hr>
+<p>title: 技术方案中非功能需求案例<br>date: 2020-04-25<br>categories: 方案文档<br>tags:</p>
+<ul>
+<li>方案文档</li>
+<li>非功能需求</li>
+</ul>
+<hr>
+<h1 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h1><h2 id="业务安全"><a href="#业务安全" class="headerlink" title="业务安全"></a>业务安全</h2><h3 id="账号安全"><a href="#账号安全" class="headerlink" title="账号安全"></a>账号安全</h3><p>采用业界主流的安全体系，管理端后台用户和 APP 用户均需要足够的安全性保障，防止用户无意识的信息泄露。</p>
+<h3 id="防暴力破解"><a href="#防暴力破解" class="headerlink" title="防暴力破解"></a>防暴力破解</h3><p>用户账号登录时附带防机器人破解逻辑。</p>
+<h3 id="交易安全"><a href="#交易安全" class="headerlink" title="交易安全"></a>交易安全</h3><p>系统要能够从根本上杜绝一切交易伪造。</p>
+<h2 id="网络安全"><a href="#网络安全" class="headerlink" title="网络安全"></a>网络安全</h2><h3 id="网络访问控制及安全域划分"><a href="#网络访问控制及安全域划分" class="headerlink" title="网络访问控制及安全域划分"></a>网络访问控制及安全域划分</h3><p>采用 VPC 安全网络，VPC 网络内划分独立的安全区域。</p>
+<h3 id="防止流量劫持"><a href="#防止流量劫持" class="headerlink" title="防止流量劫持"></a>防止流量劫持</h3><p>针对 http 在网络传输中可能被修改、窃听或者截取，为防止用户隐私数据被窃听或者泄露，全站应用采用 https 协议代替 http 协议。</p>
+<h3 id="内部网络通过交换机以及安全组进行隔离。"><a href="#内部网络通过交换机以及安全组进行隔离。" class="headerlink" title="内部网络通过交换机以及安全组进行隔离。"></a>内部网络通过交换机以及安全组进行隔离。</h3><h3 id="运维人员使用-VPN-通过-NAT-网关登录到内网机器。"><a href="#运维人员使用-VPN-通过-NAT-网关登录到内网机器。" class="headerlink" title="运维人员使用 VPN 通过 NAT 网关登录到内网机器。"></a>运维人员使用 VPN 通过 NAT 网关登录到内网机器。</h3><h2 id="系统应用安全"><a href="#系统应用安全" class="headerlink" title="系统应用安全"></a>系统应用安全</h2><p>系统运行在可信的操作系统版本之上。对于通用的系统软件要制定相应的安全配置规范。</p>
+<h3 id="敏感信息安全"><a href="#敏感信息安全" class="headerlink" title="敏感信息安全"></a>敏感信息安全</h3><p>系统对所有用户的数据提供安全保护，包括 B 端数据和 C 端数据。</p>
+<h3 id="数据访问人员控制"><a href="#数据访问人员控制" class="headerlink" title="数据访问人员控制"></a>数据访问人员控制</h3><p>为保证生产环境的数据安全，数据存储在 VPC 网络的运维区域，接口层面只提供内网的连接访问，人员层面只有运维人员通过 VPN 专线才能实现数据维护功能。</p>
+<h3 id="业务数据隔离"><a href="#业务数据隔离" class="headerlink" title="业务数据隔离"></a>业务数据隔离</h3><p>系统中的所有数据均需要有相应的权限才能访问；敏感信息需要加密。</p>
+<h2 id="数据存储安全"><a href="#数据存储安全" class="headerlink" title="数据存储安全"></a>数据存储安全</h2><h3 id="日志安全"><a href="#日志安全" class="headerlink" title="日志安全"></a>日志安全</h3><p>定时保存日志并做好备份。</p>
+<h3 id="数据库安全"><a href="#数据库安全" class="headerlink" title="数据库安全"></a>数据库安全</h3><p>数据库保证系统高可用；每日自动备份；</p>
+<h3 id="文件存储安全"><a href="#文件存储安全" class="headerlink" title="文件存储安全"></a>文件存储安全</h3><p>所有日志文件每日自动转存云服务提供商的云存储服务；<br>对于用户上传的文件采用加密的 SSL/TLS 传输，保证数据安全。</p>
+<h2 id="代码安全"><a href="#代码安全" class="headerlink" title="代码安全"></a>代码安全</h2><p>在系统代码开发的过程中，要注意代码级的安全问题，禁止出现代码漏洞。</p>
+<h1 id="系统稳定性要求"><a href="#系统稳定性要求" class="headerlink" title="系统稳定性要求"></a>系统稳定性要求</h1><h2 id="系统提供必要的监控能力"><a href="#系统提供必要的监控能力" class="headerlink" title="系统提供必要的监控能力"></a>系统提供必要的监控能力</h2><p>完成各项服务监控指标,健康状况。</p>
+<h2 id="限流能力"><a href="#限流能力" class="headerlink" title="限流能力"></a>限流能力</h2><p>控制数据注入到网络的速率，平滑网络上的突发流量。</p>
+<h2 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h2><p>当服务器压力剧增的情况下，根据当前业务情况及流量对一些服务和页面有策略的降级，以此释放服务器资源以保证核心任务的正常运行。</p>
+<h2 id="平台要求"><a href="#平台要求" class="headerlink" title="平台要求"></a>平台要求</h2><p>系统平台使用的云服务、与数据库、云存储要求使用阿里云平台架构。</p>
+<h1 id="性能要求"><a href="#性能要求" class="headerlink" title="性能要求"></a>性能要求</h1><p>本工程完成后系统应满足以下性能要求：</p>
+<ul>
+<li>系统响应时间：各常用页面(登录首页以及一级页面等)的响应时间不超过 2 秒；系统用户对数据库特定检索的反应时间不超过 3 秒。</li>
+<li>操作响应时间：系统对于用户操作的响应时间不应过长，一般的数据（2 万条记录）查询时间不得超过 2 秒。</li>
+<li>并发用户数达到上限时，系统应可以正常操作，并满足响应时间的要求，系统平均负荷应保持在 50%以下(CPU、内存占有率、I/O 负荷),系统峰值负荷应小于 70%：系统总体并发用户数为 500，一般查询达到 1500TPS，锁座解锁等 POS 类操作达到 200TPS。</li>
+</ul>
+<h1 id="可扩展性要求"><a href="#可扩展性要求" class="headerlink" title="可扩展性要求"></a>可扩展性要求</h1><h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><p>遵循松耦合设计原则；各系统能够独立部署，方便未来根据需要各自进行独立的扩展；<br>采用基于微服务的应用分布式架构，实现系统间的解耦；<br>各业务处理系统提供标准规范的接口服务，使多渠道业务整合与拓展成为可能。</p>
+<h2 id="数据拆分："><a href="#数据拆分：" class="headerlink" title="数据拆分："></a>数据拆分：</h2><p>按不同的系统对数据库进行拆分，可以灵活地按照业务系统的需求对实现数据库进行水平拆分，满足扩展性与高性能需要。</p>
+<h1 id="用户界面"><a href="#用户界面" class="headerlink" title="用户界面"></a>用户界面</h1><p>要求界面美观大方，用户操作简单，提供人性化的页面模版修改功能，可以根据用户要求修改页面，提供页面查询形式的即时帮助文件功能。提供相关问题的组合查询功能。</p>
+<h1 id="日志管理"><a href="#日志管理" class="headerlink" title="日志管理"></a>日志管理</h1><p>系统必须保障各类网络管理数据信息的一致性、完整性和有效性，防止外部对系统内部重要信息资源、系统资源的窃取和破坏。在有效地为管理部门和生产部门提供服务的同时，还必须确保不影响通信网络的安全、可靠稳定运行。</p>
+<h2 id="日志内容"><a href="#日志内容" class="headerlink" title="日志内容"></a>日志内容</h2><p>操作日志：系统必须记录每个操作员进入、退出系统的时间以及在系统中的所有操作的内容，至少需要包括帐号管理、权限管理、系统管理等重要操作列表中所罗列的操作，应该包括但不限于登录时间、退出时间、操作人、操作时间、指令内容、执行结果、所属设备等等字段信息。<br>系统日志：监控系统进程，记录系统软硬件的异常以及执行错误指令导致的异常。</p>
+<h2 id="日志存储与转发"><a href="#日志存储与转发" class="headerlink" title="日志存储与转发"></a>日志存储与转发</h2><p>系统日志存储在服务器端，并定期备份。操作日志至少存储半年。</p>
+<h1 id="系统自身管理"><a href="#系统自身管理" class="headerlink" title="系统自身管理"></a>系统自身管理</h1><p>系统自身管理是系统的重要组成部分，系统自身管理是指对系统自身的配置、运行状况、备份和系统安全等情况进行管理。通过系统的自身管理，保证系统能够安全可靠地运行。</p>
+<h2 id="系统监控"><a href="#系统监控" class="headerlink" title="系统监控"></a>系统监控</h2><p>系统监控中发现的故障都应产生告警，并在告警监控界面统一呈现。</p>
+<h2 id="用户监控"><a href="#用户监控" class="headerlink" title="用户监控"></a>用户监控</h2><p>系统能对当前登录到系统的所有系统用户进行监视，系统能显示当前登录到系统的所有系统用户的用户名和登录时间，以及每用户占用系统资源情况。</p>
+<h2 id="进程监控"><a href="#进程监控" class="headerlink" title="进程监控"></a>进程监控</h2><p>系统能够对系统的服务进程进行监控，包括进程的名称，进程运行所在主机，进程状态，进程启动时间和进程版本等信息。其中进程状态包括：未运行、运行正常、运行出错。</p>
+<h2 id="主机监控"><a href="#主机监控" class="headerlink" title="主机监控"></a>主机监控</h2><p>每个服务器上的磁盘空间资源和内存资源、数据库系统中的存储空间资源。</p>
+<h2 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h2><p>系统能对网管网内部的重要网络设备和服务器设备的重要系统性能指标（CPU 负载、磁盘使用情况等）进行监视。<br>系统读数据库监控包括监控数据库启动和关闭，数据库连接情况、存储空间的使用和余量、系统资源（锁、共享内存）使用状况。</p>
+<h1 id="系统维护"><a href="#系统维护" class="headerlink" title="系统维护"></a>系统维护</h1><p>系统维护过程中要注意安全的要求，把定期的安全评估纳入维护工作范畴，在维保合同中予以体现。卖方有义务按照买方的要求，配合买方对系统实施安全相关工作。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/27/SpringBoot%20%E2%80%93%20RestTemplate%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" rel="next" title="RestTemplate使用指南">
+                <i class="fa fa-chevron-left"></i> RestTemplate使用指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安全"><span class="nav-number">1.</span> <span class="nav-text">安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务安全"><span class="nav-number">1.1.</span> <span class="nav-text">业务安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#账号安全"><span class="nav-number">1.1.1.</span> <span class="nav-text">账号安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防暴力破解"><span class="nav-number">1.1.2.</span> <span class="nav-text">防暴力破解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#交易安全"><span class="nav-number">1.1.3.</span> <span class="nav-text">交易安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络安全"><span class="nav-number">1.2.</span> <span class="nav-text">网络安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络访问控制及安全域划分"><span class="nav-number">1.2.1.</span> <span class="nav-text">网络访问控制及安全域划分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防止流量劫持"><span class="nav-number">1.2.2.</span> <span class="nav-text">防止流量劫持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内部网络通过交换机以及安全组进行隔离。"><span class="nav-number">1.2.3.</span> <span class="nav-text">内部网络通过交换机以及安全组进行隔离。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运维人员使用-VPN-通过-NAT-网关登录到内网机器。"><span class="nav-number">1.2.4.</span> <span class="nav-text">运维人员使用 VPN 通过 NAT 网关登录到内网机器。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统应用安全"><span class="nav-number">1.3.</span> <span class="nav-text">系统应用安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#敏感信息安全"><span class="nav-number">1.3.1.</span> <span class="nav-text">敏感信息安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据访问人员控制"><span class="nav-number">1.3.2.</span> <span class="nav-text">数据访问人员控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#业务数据隔离"><span class="nav-number">1.3.3.</span> <span class="nav-text">业务数据隔离</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据存储安全"><span class="nav-number">1.4.</span> <span class="nav-text">数据存储安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志安全"><span class="nav-number">1.4.1.</span> <span class="nav-text">日志安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库安全"><span class="nav-number">1.4.2.</span> <span class="nav-text">数据库安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件存储安全"><span class="nav-number">1.4.3.</span> <span class="nav-text">文件存储安全</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码安全"><span class="nav-number">1.5.</span> <span class="nav-text">代码安全</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统稳定性要求"><span class="nav-number">2.</span> <span class="nav-text">系统稳定性要求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统提供必要的监控能力"><span class="nav-number">2.1.</span> <span class="nav-text">系统提供必要的监控能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限流能力"><span class="nav-number">2.2.</span> <span class="nav-text">限流能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#降级"><span class="nav-number">2.3.</span> <span class="nav-text">降级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平台要求"><span class="nav-number">2.4.</span> <span class="nav-text">平台要求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#性能要求"><span class="nav-number">3.</span> <span class="nav-text">性能要求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可扩展性要求"><span class="nav-number">4.</span> <span class="nav-text">可扩展性要求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统架构"><span class="nav-number">4.1.</span> <span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据拆分："><span class="nav-number">4.2.</span> <span class="nav-text">数据拆分：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户界面"><span class="nav-number">5.</span> <span class="nav-text">用户界面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#日志管理"><span class="nav-number">6.</span> <span class="nav-text">日志管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志内容"><span class="nav-number">6.1.</span> <span class="nav-text">日志内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志存储与转发"><span class="nav-number">6.2.</span> <span class="nav-text">日志存储与转发</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统自身管理"><span class="nav-number">7.</span> <span class="nav-text">系统自身管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#系统监控"><span class="nav-number">7.1.</span> <span class="nav-text">系统监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户监控"><span class="nav-number">7.2.</span> <span class="nav-text">用户监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程监控"><span class="nav-number">7.3.</span> <span class="nav-text">进程监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主机监控"><span class="nav-number">7.4.</span> <span class="nav-text">主机监控</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能监控"><span class="nav-number">7.5.</span> <span class="nav-text">性能监控</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统维护"><span class="nav-number">8.</span> <span class="nav-text">系统维护</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
