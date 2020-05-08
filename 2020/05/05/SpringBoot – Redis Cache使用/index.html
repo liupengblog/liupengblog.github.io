@@ -82,7 +82,7 @@
 <meta name="description" content="简介Spring Cache 提供了 @Cacheable 、@CachePut 、@CacheEvict 、@Caching 等注解，这些注解主要用在方法上。通过注解 Cache 可以实现类似事务一样、缓存逻辑透明的应用到我们的业务代码上，且只需要更少的代码。核心思想：当我们调用一个方法时会把该方法的参数和返回结果最为一个键值对存放在缓存中，等下次利用同样的参数来调用该方法时将不会再执行，而是直">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringBoot – Redis Cache使用">
-<meta property="og:url" content="http://yoursite.com/2020/05/01/SpringBoot%20%E2%80%93%20Redis%20Cache%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/05/05/SpringBoot%20%E2%80%93%20Redis%20Cache%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Sptan的blogs">
 <meta property="og:description" content="简介Spring Cache 提供了 @Cacheable 、@CachePut 、@CacheEvict 、@Caching 等注解，这些注解主要用在方法上。通过注解 Cache 可以实现类似事务一样、缓存逻辑透明的应用到我们的业务代码上，且只需要更少的代码。核心思想：当我们调用一个方法时会把该方法的参数和返回结果最为一个键值对存放在缓存中，等下次利用同样的参数来调用该方法时将不会再执行，而是直">
 <meta property="og:image" content="https://sptan-pic.oss-cn-shanghai.aliyuncs.com/rediscache/QQ20200429-135544.png">
@@ -112,8 +112,8 @@
 <meta property="og:image" content="https://sptan-pic.oss-cn-shanghai.aliyuncs.com/rediscache/QQ20200506-152633.png">
 <meta property="og:image" content="https://sptan-pic.oss-cn-shanghai.aliyuncs.com/rediscache/QQ20200506-153710.png">
 <meta property="og:image" content="https://sptan-pic.oss-cn-shanghai.aliyuncs.com/rediscache/QQ20200506-153918.png">
-<meta property="article:published_time" content="2020-04-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-05-08T05:00:03.017Z">
+<meta property="article:published_time" content="2020-05-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-08T08:50:33.727Z">
 <meta property="article:author" content="Sptan">
 <meta property="article:tag" content="缓存">
 <meta property="article:tag" content="Redis">
@@ -150,7 +150,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/05/01/SpringBoot – Redis Cache使用/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/05/05/SpringBoot – Redis Cache使用/"/>
 
 
 
@@ -293,7 +293,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/01/SpringBoot%20%E2%80%93%20Redis%20Cache%E4%BD%BF%E7%94%A8/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/05/SpringBoot%20%E2%80%93%20Redis%20Cache%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Sptan">
@@ -322,8 +322,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-01T00:00:00+08:00">
-                2020-05-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-05T00:00:00+08:00">
+                2020-05-05
               </time>
             
 
@@ -403,8 +403,8 @@
 <li>例子代码中接口以 Swagger 进行封装，通过在 Swagger 界面调用接口完成我们的操作；</li>
 <li>初始化状态下，Redis 中没有数据。<br><img src="https://sptan-pic.oss-cn-shanghai.aliyuncs.com/rediscache/QQ20200429-135544.png" alt=""></li>
 </ul>
-<h1 id="主要注解的解释"><a href="#主要注解的解释" class="headerlink" title="主要注解的解释"></a>主要注解的解释</h1><h2 id="CacheConfig"><a href="#CacheConfig" class="headerlink" title="@CacheConfig"></a>@CacheConfig</h2><p>主要用于配置该类中会用到的一些共用的缓存配置。<br>在这里 @CacheConfig(cacheNames = “users”)：配置了该数据访问对象中返回的内容将存储于名为 users 的缓存对象中，我们也可以不使用该注解，直接通过 @Cacheable 自己配置缓存集的名字来定义。</p>
-<h2 id="Cacheable"><a href="#Cacheable" class="headerlink" title="@Cacheable"></a>@Cacheable</h2><p>主要针对方法配置，能够根据方法的请求参数对其结果进行缓存。同时在查询时，会先从缓存中获取，若不存在才再发起对数据库的访问。该注解主要有下面几个参数：</p>
+<h1 id="常用缓存注解详解"><a href="#常用缓存注解详解" class="headerlink" title="常用缓存注解详解"></a>常用缓存注解详解</h1><h2 id="CacheConfig"><a href="#CacheConfig" class="headerlink" title="@CacheConfig"></a>@CacheConfig</h2><p>主要用于配置该类中会用到的一些共用的缓存配置。<br>在这里 @CacheConfig(cacheNames = “users”)：配置了该数据访问对象中返回的内容将存储于名为 users 的缓存对象中，我们也可以不使用该注解，直接通过 @Cacheable 自己配置缓存集的名字来定义。</p>
+<h2 id="Cacheable"><a href="#Cacheable" class="headerlink" title="@Cacheable"></a>@Cacheable</h2><p>主要针对方法配置，能够根据方法的请求参数对其结果进行缓存。同时在查询时，会先从缓存中获取，若不存在才执行方法体访问数据,同时把结果缓存起来。该注解主要有下面几个参数：</p>
 <ul>
 <li><p>value、cacheNames</p>
 <p>两个等同的参数（cacheNames 为 Spring 4 新增，作为 value 的别名），用于指定缓存存储的集合名。由于 Spring 4 中新增了 @CacheConfig，因此在 Spring 3 中原本必须有的 value 属性，也成为非必需项了。</p>
@@ -425,7 +425,7 @@
 <p>用于指定使用哪个缓存管理器，非必需。只有当有多个时才需要使用。</p>
 </li>
 <li><p>cacheResolver</p>
-<pre><code>用于指定使用那个缓存解析器，非必需。需通过</code></pre><p>org.springframework.cache.interceptor.CacheResolver 接口来实现自己的缓存解析器，并用该参数指定。</p>
+<p>用于指定使用那个缓存解析器，非必需。需通过 org.springframework.cache.interceptor.CacheResolver 接口来实现自己的缓存解析器，并用该参数指定。</p>
 </li>
 </ul>
 <h2 id="CachePut"><a href="#CachePut" class="headerlink" title="@CachePut"></a>@CachePut</h2><p>配置于方法上，能够根据参数定义条件来进行缓存，它与 @Cacheable 不同的是，它不会去检查缓存中是否存在之前执行过的结果，而是每次都会执行该方法，并将执行结果以键值对的形式存入缓存中，所以主要用于数据新增和修改操作上。它的参数与 @Cacheable 类似，具体功能可参考上面对 @Cacheable 参数的解析。</p>
@@ -642,8 +642,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/04/25/%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82%E6%A1%88%E4%BE%8B/" rel="next" title="技术方案中非功能需求案例">
-                <i class="fa fa-chevron-left"></i> 技术方案中非功能需求案例
+              <a href="/2020/05/03/Redis5%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/" rel="next" title="Redis5配置说明">
+                <i class="fa fa-chevron-left"></i> Redis5配置说明
               </a>
             
           </div>
@@ -651,10 +651,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/05/01/Redis5%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/" rel="prev" title="Redis5配置说明">
-                Redis5配置说明 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -814,7 +810,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-中启用-Redis-缓存"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot 中启用 Redis 缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用注解式缓存"><span class="nav-number">3.</span> <span class="nav-text">使用注解式缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要注解的解释"><span class="nav-number">4.</span> <span class="nav-text">主要注解的解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheConfig"><span class="nav-number">4.1.</span> <span class="nav-text">@CacheConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable"><span class="nav-number">4.2.</span> <span class="nav-text">@Cacheable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachePut"><span class="nav-number">4.3.</span> <span class="nav-text">@CachePut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheEvict"><span class="nav-number">4.4.</span> <span class="nav-text">@CacheEvict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable-使用举例"><span class="nav-number">4.5.</span> <span class="nav-text">@Cacheable 使用举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询单个对象"><span class="nav-number">4.5.1.</span> <span class="nav-text">查询单个对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分页查询"><span class="nav-number">4.5.2.</span> <span class="nav-text">分页查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为-Service-设置-CacheNames"><span class="nav-number">4.5.3.</span> <span class="nav-text">为 Service 设置 CacheNames</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheEvict-使用举例"><span class="nav-number">4.6.</span> <span class="nav-text">@CacheEvict 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachePut-使用举例"><span class="nav-number">4.7.</span> <span class="nav-text">@CachePut 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Caching-使用举例"><span class="nav-number">4.8.</span> <span class="nav-text">@Caching 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheConfig-使用举例"><span class="nav-number">4.9.</span> <span class="nav-text">@CacheConfig 使用举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件式缓存"><span class="nav-number">5.</span> <span class="nav-text">条件式缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件参数"><span class="nav-number">5.1.</span> <span class="nav-text">条件参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排除性条件参数"><span class="nav-number">5.2.</span> <span class="nav-text">排除性条件参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用缓存配置"><span class="nav-number">6.</span> <span class="nav-text">常用缓存配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#失效时间设定"><span class="nav-number">6.1.</span> <span class="nav-text">失效时间设定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更精确一点的配置"><span class="nav-number">6.2.</span> <span class="nav-text">更精确一点的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备-Cache-配置："><span class="nav-number">6.2.1.</span> <span class="nav-text">准备 Cache 配置：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单个方法级别的缓存失效时间配置"><span class="nav-number">6.3.</span> <span class="nav-text">单个方法级别的缓存失效时间配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#让保存的-Redis-数据可视化"><span class="nav-number">6.4.</span> <span class="nav-text">让保存的 Redis 数据可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置自定义的-key-值"><span class="nav-number">6.5.</span> <span class="nav-text">设置自定义的 key 值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不做任何设定-观察缓存-key-值"><span class="nav-number">6.5.1.</span> <span class="nav-text">不做任何设定,观察缓存 key 值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-CacheConfig-为-Service-类增加-cacheNames"><span class="nav-number">6.5.2.</span> <span class="nav-text">通过@CacheConfig 为 Service 类增加 cacheNames</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-Cacheable-或者-CachePut-等其他注解-为方法追加方法级的属性"><span class="nav-number">6.5.3.</span> <span class="nav-text">通过@Cacheable(或者@CachePut 等其他注解) 为方法追加方法级的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KeyGenerator-定制化-key-值"><span class="nav-number">6.5.4.</span> <span class="nav-text">KeyGenerator 定制化 key 值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-2-x-中常见的-Redis-缓存问题"><span class="nav-number">7.</span> <span class="nav-text">SpringBoot 2.x 中常见的 Redis 缓存问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lettuce-简介与使用举例"><span class="nav-number">7.1.</span> <span class="nav-text">Lettuce 简介与使用举例</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-中启用-Redis-缓存"><span class="nav-number">2.</span> <span class="nav-text">SpringBoot 中启用 Redis 缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用注解式缓存"><span class="nav-number">3.</span> <span class="nav-text">使用注解式缓存</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用缓存注解详解"><span class="nav-number">4.</span> <span class="nav-text">常用缓存注解详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheConfig"><span class="nav-number">4.1.</span> <span class="nav-text">@CacheConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable"><span class="nav-number">4.2.</span> <span class="nav-text">@Cacheable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachePut"><span class="nav-number">4.3.</span> <span class="nav-text">@CachePut</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheEvict"><span class="nav-number">4.4.</span> <span class="nav-text">@CacheEvict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cacheable-使用举例"><span class="nav-number">4.5.</span> <span class="nav-text">@Cacheable 使用举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询单个对象"><span class="nav-number">4.5.1.</span> <span class="nav-text">查询单个对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分页查询"><span class="nav-number">4.5.2.</span> <span class="nav-text">分页查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为-Service-设置-CacheNames"><span class="nav-number">4.5.3.</span> <span class="nav-text">为 Service 设置 CacheNames</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheEvict-使用举例"><span class="nav-number">4.6.</span> <span class="nav-text">@CacheEvict 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachePut-使用举例"><span class="nav-number">4.7.</span> <span class="nav-text">@CachePut 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Caching-使用举例"><span class="nav-number">4.8.</span> <span class="nav-text">@Caching 使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CacheConfig-使用举例"><span class="nav-number">4.9.</span> <span class="nav-text">@CacheConfig 使用举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#条件式缓存"><span class="nav-number">5.</span> <span class="nav-text">条件式缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#条件参数"><span class="nav-number">5.1.</span> <span class="nav-text">条件参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#排除性条件参数"><span class="nav-number">5.2.</span> <span class="nav-text">排除性条件参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用缓存配置"><span class="nav-number">6.</span> <span class="nav-text">常用缓存配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#失效时间设定"><span class="nav-number">6.1.</span> <span class="nav-text">失效时间设定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更精确一点的配置"><span class="nav-number">6.2.</span> <span class="nav-text">更精确一点的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备-Cache-配置："><span class="nav-number">6.2.1.</span> <span class="nav-text">准备 Cache 配置：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单个方法级别的缓存失效时间配置"><span class="nav-number">6.3.</span> <span class="nav-text">单个方法级别的缓存失效时间配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#让保存的-Redis-数据可视化"><span class="nav-number">6.4.</span> <span class="nav-text">让保存的 Redis 数据可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置自定义的-key-值"><span class="nav-number">6.5.</span> <span class="nav-text">设置自定义的 key 值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不做任何设定-观察缓存-key-值"><span class="nav-number">6.5.1.</span> <span class="nav-text">不做任何设定,观察缓存 key 值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-CacheConfig-为-Service-类增加-cacheNames"><span class="nav-number">6.5.2.</span> <span class="nav-text">通过@CacheConfig 为 Service 类增加 cacheNames</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-Cacheable-或者-CachePut-等其他注解-为方法追加方法级的属性"><span class="nav-number">6.5.3.</span> <span class="nav-text">通过@Cacheable(或者@CachePut 等其他注解) 为方法追加方法级的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KeyGenerator-定制化-key-值"><span class="nav-number">6.5.4.</span> <span class="nav-text">KeyGenerator 定制化 key 值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SpringBoot-2-x-中常见的-Redis-缓存问题"><span class="nav-number">7.</span> <span class="nav-text">SpringBoot 2.x 中常见的 Redis 缓存问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lettuce-简介与使用举例"><span class="nav-number">7.1.</span> <span class="nav-text">Lettuce 简介与使用举例</span></a></li></ol></li></ol></div>
             
 
           </div>
