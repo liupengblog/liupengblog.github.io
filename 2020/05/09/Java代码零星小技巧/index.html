@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Java小技巧," />
 
 
 
@@ -79,15 +79,16 @@
 
 
 
-<meta name="description" content="好记性不如烂笔头。所以要把做过的事写下来。 言之不文，行之不远。 所以还要写好。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta name="description" content="本文记录一些零星的代码技巧,主要还是对于一些写过的代码做个备忘。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java代码零星小技巧">
+<meta property="og:url" content="http://yoursite.com/2020/05/09/Java%E4%BB%A3%E7%A0%81%E9%9B%B6%E6%98%9F%E5%B0%8F%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="Sptan的blogs">
-<meta property="og:description" content="好记性不如烂笔头。所以要把做过的事写下来。 言之不文，行之不远。 所以还要写好。">
-<meta property="article:published_time" content="2020-03-30T04:16:41.000Z">
-<meta property="article:modified_time" content="2020-04-26T14:23:51.739Z">
+<meta property="og:description" content="本文记录一些零星的代码技巧,主要还是对于一些写过的代码做个备忘。">
+<meta property="article:published_time" content="2020-05-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-09T09:27:57.008Z">
 <meta property="article:author" content="Sptan">
+<meta property="article:tag" content="Java小技巧">
 <meta name="twitter:card" content="summary">
 
 
@@ -118,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/05/09/Java代码零星小技巧/"/>
 
 
 
 
 
-  <title>关于 | Sptan的blogs</title>
+  <title>Java代码零星小技巧 | Sptan的blogs</title>
   
 
 
@@ -249,35 +250,169 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/09/Java%E4%BB%A3%E7%A0%81%E9%9B%B6%E6%98%9F%E5%B0%8F%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">关于</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>好记性不如烂笔头。所以要把做过的事写下来。</p>
-<p>言之不文，行之不远。 所以还要写好。</p>
-
+          <h1 class="post-title" itemprop="name headline">Java代码零星小技巧</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-09T00:00:00+08:00">
+                2020-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaSE/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaSE</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>本文记录一些零星的代码技巧,主要还是对于一些写过的代码做个备忘。</p>
+<a id="more"></a>
+
+<h1 id="不解压压缩文件直接读取压缩文件中的内容"><a href="#不解压压缩文件直接读取压缩文件中的内容" class="headerlink" title="不解压压缩文件直接读取压缩文件中的内容"></a>不解压压缩文件直接读取压缩文件中的内容</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public final class ZipFileUtil &#123;</span><br><span class="line"></span><br><span class="line">    public static List&lt;String&gt; readZipFileContent(InputStream in) throws Exception &#123;</span><br><span class="line">        ZipInputStream zipInputStream &#x3D; new ZipInputStream(in);</span><br><span class="line">        List&lt;String&gt; result &#x3D; new ArrayList&lt;&gt;();</span><br><span class="line">        while ((zipInputStream.getNextEntry()) !&#x3D; null) &#123;</span><br><span class="line">            BufferedReader bufferedReader &#x3D; new BufferedReader(</span><br><span class="line">                    new InputStreamReader(zipInputStream));</span><br><span class="line">            String line;</span><br><span class="line">            while ((line &#x3D; bufferedReader.readLine()) !&#x3D; null) &#123;</span><br><span class="line">                result.add(line);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java%E5%B0%8F%E6%8A%80%E5%B7%A7/" rel="tag"># Java小技巧</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/05/SpringBoot%20%E2%80%93%20Redis%20Cache%E4%BD%BF%E7%94%A8/" rel="next" title="SpringBoot – Redis Cache使用">
+                <i class="fa fa-chevron-left"></i> SpringBoot – Redis Cache使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -310,8 +445,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -399,6 +543,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#不解压压缩文件直接读取压缩文件中的内容"><span class="nav-number">1.</span> <span class="nav-text">不解压压缩文件直接读取压缩文件中的内容</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
