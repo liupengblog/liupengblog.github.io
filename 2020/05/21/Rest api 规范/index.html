@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="开发规范,Rest api," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Fielding 是一个非常重要的人，他是 HTTP 协议（1.0 版和 1.1 版）的主要设计者、Apache 服务器软件的作者之一、Apache 基金会的第一任主席。Fielding 将他对互联网软件的架构原则，定名为 REST，即 Representational State Transfer 的缩写。 如果一个架构符合 REST 原则，就称它为 RESTful 架构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rest api 规范">
+<meta property="og:url" content="http://yoursite.com/2020/05/21/Rest%20api%20%E8%A7%84%E8%8C%83/index.html">
+<meta property="og:site_name" content="Sptan的blogs">
+<meta property="og:description" content="Fielding 是一个非常重要的人，他是 HTTP 协议（1.0 版和 1.1 版）的主要设计者、Apache 服务器软件的作者之一、Apache 基金会的第一任主席。Fielding 将他对互联网软件的架构原则，定名为 REST，即 Representational State Transfer 的缩写。 如果一个架构符合 REST 原则，就称它为 RESTful 架构。">
+<meta property="article:published_time" content="2020-05-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-05-24T08:27:40.205Z">
+<meta property="article:author" content="Sptan">
+<meta property="article:tag" content="开发规范">
+<meta property="article:tag" content="Rest api">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/21/Rest api 规范/"/>
+
+
+
+
+
+  <title>Rest api 规范 | Sptan的blogs</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Sptan的blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">懒惰的码农</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/21/Rest%20api%20%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sptan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Sptan的blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Rest api 规范</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-21T00:00:00+08:00">
+                2020-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/" itemprop="url" rel="index">
+                    <span itemprop="name">开发规范</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Fielding 是一个非常重要的人，他是 HTTP 协议（1.0 版和 1.1 版）的主要设计者、Apache 服务器软件的作者之一、Apache 基金会的第一任主席。Fielding 将他对互联网软件的架构原则，定名为 REST，即 Representational State Transfer 的缩写。</p>
+<p>如果一个架构符合 REST 原则，就称它为 RESTful 架构。</p>
+<a id="more"></a>
+
+<h2 id="RESTful-API-Design-名词定义"><a href="#RESTful-API-Design-名词定义" class="headerlink" title="RESTful API Design 名词定义"></a>RESTful API Design 名词定义</h2><p>Resource: 一个简单的实例。有一些属性或者一些子资源，子资源可以是 一个简单的资源或者一组资源例如：book, userCollection: 一组同类的资源对象。例如：books, usersHTTP: 网络协议。</p>
+<h2 id="HTTP-Verbs"><a href="#HTTP-Verbs" class="headerlink" title="HTTP Verbs"></a>HTTP Verbs</h2><ul>
+<li>GET（SELECT）：从服务器取出资源（一项或多项）。</li>
+<li>POST（CREATE）：在服务器新建一个资源。</li>
+<li>PUT（UPDATE）：在服务器更新完整的资源（客户端提供改变后的完整资源）。</li>
+<li>DELETE（DELETE）：从服务器删除资源。</li>
+</ul>
+<h2 id="Resource-Oriented-Design"><a href="#Resource-Oriented-Design" class="headerlink" title="Resource Oriented Design"></a>Resource Oriented Design</h2><h2 id="设计流程"><a href="#设计流程" class="headerlink" title="设计流程"></a>设计流程</h2><p>确定一个 api 提供什么类型的资源确定资源之间的依赖关系基于类型和依赖关系确定资源的命名确定资源的结构为资源添加最少的方法。</p>
+<h3 id="Resource-Names"><a href="#Resource-Names" class="headerlink" title="Resource Names"></a>Resource Names</h3><p>资源是一个实体对象，那么资源名就是这个资源的标识。</p>
+<p>一个资源名应该由 Resource ID，Collection ID 和 API Service 名组成。</p>
+<p>例 1：存储服务有 buckets 的集合,其中每个桶包含一个 objects 集合。<br>| API Service Name | Collection ID | Resource ID | Sub-Collection ID | Sub-Resource ID |<br>| ———————— | ————- | ———– | —————– | ————— |<br>| //gateway.com.cn/storage | /buckets | /bucket-id | /objects | /object-id |<br>例 2：电子邮件服务用户的集合。sub-resource 每个用户都有一个设置,设置 sub-resource 有许多其他的子资源,包括 customFrom:</p>
+<table>
+<thead>
+<tr>
+<th>API Service Name</th>
+<th>Collection ID</th>
+<th>Resource ID</th>
+<th>Sub-Collection ID</th>
+<th>Sub-Resource ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>//gateway.com.cn/mails</td>
+<td>/users</td>
+<td>/name@example.com</td>
+<td>/settings</td>
+<td>/customFrom</td>
+</tr>
+</tbody></table>
+<p>全名：//gateway.com.cn/storage/buckets/1/materials/wood</p>
+<p>相对名：buckets/1/materials/woodHTTP</p>
+<p>URL：<a href="http://gateway.com.cn/storage/v1/buckets/1/materials/wood" target="_blank" rel="noopener">http://gateway.com.cn/storage/v1/buckets/1/materials/wood</a></p>
+<h3 id="Resource-ID"><a href="#Resource-ID" class="headerlink" title="Resource ID"></a>Resource ID</h3><p>Resource ID 标识着资源属于父资源中。Resource ID 可能不止一个单词，也有可能是一个相对路径。Resource ID 必须清楚地被记录，无论是客户端,服务器,或第三方。</p>
+<h3 id="Collection-ID"><a href="#Collection-ID" class="headerlink" title="Collection ID"></a>Collection ID</h3><p>Collection ID 必须是有效的程序标识符。Collection ID 必须是驼峰形式的复数结构，如果没有复数形式，应使用单数。Collection ID 必须是清晰简洁的英文单词。Collection ID 避免使用笼统的表示，例如 objects、values、types。</p>
+<h2 id="Action-命名规范"><a href="#Action-命名规范" class="headerlink" title="Action 命名规范"></a>Action 命名规范</h2><h3 id="基本规范"><a href="#基本规范" class="headerlink" title="基本规范"></a>基本规范</h3><p>使用”/“表示层级关系 url 不能以”/“结尾 url 中不能包含空格””url 中不能以文件后缀结尾 url 中字母小写，单词间加下划线不要再 url 中添加 CRUD</p>
+<h3 id="类别"><a href="#类别" class="headerlink" title="类别"></a>类别</h3><table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Action Name</th>
+<th>HTTP Mapping</th>
+<th>HTTP Request Body</th>
+<th>HTTP Response Body</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查询所有</td>
+<td>list</td>
+<td>GET</td>
+<td>N/A</td>
+<td>Resource*list</td>
+</tr>
+<tr>
+<td>获取单个资源</td>
+<td>query</td>
+<td>GET</td>
+<td>N/A</td>
+<td>Resource*</td>
+</tr>
+<tr>
+<td>创建单个资源</td>
+<td>create</td>
+<td>POST</td>
+<td>Resource</td>
+<td>Resource*</td>
+</tr>
+<tr>
+<td>更新单个资源</td>
+<td>update</td>
+<td>PUT</td>
+<td>Resource</td>
+<td>Resource*</td>
+</tr>
+<tr>
+<td>删除单个资源</td>
+<td>delete</td>
+<td>DELETE</td>
+<td>N/A</td>
+<td>Empty</td>
+</tr>
+</tbody></table>
+<h4 id="List"><a href="#List" class="headerlink" title="List"></a>List</h4><p>List 方法接受一个 Collection id 和 0 或多个参数作为输入,并返回一个列表的资源。</p>
+<p>List 必须使用 GET 方法接口必须以 collection id 结尾。其他的请求字段必须作为 url 查询参数。没有请求体，接口上必须不能包含 request body。响应体应该包含一组资源和一些可选项元数据。</p>
+<h4 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h4><p>Query 方法接受一个 Resource name 和 0 或多个参数,并返回指定的资源。</p>
+<p>Query 必须使 GET 方法。请求 url 必须包含 Resource name。其他的请求字段必须作为 url 查询参数。没有请求体，接口上必须不能包含 request body。响应体应该返回整个资源对象。</p>
+<h4 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h4><p>Create 方法接受一个 Collection id ,一个资源,和 0 或多个参数。它创建一个新的资源在指定的父资源下,并返回新创建的资源。</p>
+<p>Create 必须使用 POST 方法。应该包含父资源名用于指定资源创建的位置。创建的资源应该对应在 request body。响应体应该返回整个资源对象。Create 必须传递一个 resource，这样即使 resource 的结构发生变化，也不需要去更新方法或者资源结构，那些弃用的字段则需要标识为“只读”。</p>
+<h4 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h4><p>Update 方法接受一个资源和 0 或多个参数。更新指定的资源和其属性,并返回更新的资源。</p>
+<p>除了 Resource Name 和其父资源之外，这个资源的所有属性应该是可以更新的。资源的重命名和移动则需要自定义方法。如果只支持一个完整对象的更新，Update 必须使用 PUT 方法。Resource Name 必须包含在请求的 url 中。资源应该对应在 request body。</p>
+<h4 id="Delete"><a href="#Delete" class="headerlink" title="Delete"></a>Delete</h4><p>Delete 方法接受一个 Resource Name 和 0 或多个参数,并删除指定的资源。</p>
+<p>Delete 必须使用 DELETE 方法。Resource Name 必须包含在请求的 url 中。没有请求体，接口上必须不能包含 request body。如果是立即删除，应该返回空如果是启动一个删除操作，应该返回一个删除操作。如果只是标识某个资源是“被删除的”，应该返回一个更新后的资源。如果多个删除请求删除同一资源，那么只有第一个请求才应该成功，其他的返回 not found。</p>
+<h3 id="自定义方法"><a href="#自定义方法" class="headerlink" title="自定义方法"></a>自定义方法</h3><p>自定义的方法应该参考 5 个基本方法。应该用于基本方法不能实现的功能性方法。可能需要一个任意请求并返回一个任意的响应,也可能是流媒体请求和响应。</p>
+<p>可以对应 a resource, a collection 甚至 a service。</p>
+<p>自定义方法应该使用 POST 方法。不应该使用 PATCH 方法。自定义方法对应的 Resource Name 或者 Collection id 必须包含在请求的 url 中。如果使用的 HTTP 方法接受 request body，则需要对应一个请求体。如果使用的 HTTP 方法不接受 request body，则需要声明不使用 body，并且参数应该作为 url 查询参数。</p>
+<h4 id="批量添加"><a href="#批量添加" class="headerlink" title="批量添加"></a>批量添加</h4><table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Action Name</th>
+<th>HTTP Mapping</th>
+<th>HTTP Request Body</th>
+<th>HTTP Response Body</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>批量添加</td>
+<td>batchCreate</td>
+<td>POST/batch_create</td>
+<td>Resource*list</td>
+<td>Resource IDS</td>
+</tr>
+</tbody></table>
+<h4 id="批量删除"><a href="#批量删除" class="headerlink" title="批量删除"></a>批量删除</h4><table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Action Name</th>
+<th>HTTP Mapping</th>
+<th>HTTP Request Body</th>
+<th>HTTP Response Body</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>批量删除</td>
+<td>batchDelete</td>
+<td>POST /batch_delete</td>
+<td>Resource IDS</td>
+<td>Empty</td>
+</tr>
+</tbody></table>
+<h4 id="更新单个资源中的属性"><a href="#更新单个资源中的属性" class="headerlink" title="更新单个资源中的属性"></a>更新单个资源中的属性</h4><table>
+<thead>
+<tr>
+<th>Description</th>
+<th>Action Name</th>
+<th>HTTP Mapping</th>
+<th>HTTP Request Body</th>
+<th>HTTP Response Body</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>更新资源的状态</td>
+<td>updateAttribute</td>
+<td>POST /:attribute?value=</td>
+<td>N/A</td>
+<td>{“key”:“”,“value”:“”}</td>
+</tr>
+<tr>
+<td>更新用户的年龄</td>
+<td>updateAge</td>
+<td>POST /v1/users/1/age?value=20</td>
+<td>N/A</td>
+<td>{“key”:“age”,“value”:“20”}</td>
+</tr>
+</tbody></table>
+<h4 id="对资源执行某一动作"><a href="#对资源执行某一动作" class="headerlink" title="对资源执行某一动作"></a>对资源执行某一动作</h4><p>比如发送消息，启用什么功能。如果是针对资源，则 Action Name 为动词。如果是针对资源的属性，则 Action Name 为动词+属性名。请求以动词结尾，属性作为参数。<br>| Description | Action Name | HTTP Mapping | HTTP Request Body | HTTP Response Body |<br>| ———————- | ———– | ——————————- | —————– | —————— |<br>| 对资源执行某一动作 | customVerb | POST /custom_verb | N/A | * |<br>| 取消某种操作 | cancel | POST /cancel | N/A | Boolean |<br>| 从回收站中恢复一个资源 | undelete | POST /v1/projects/1/undelete | N/A | Boolean |<br>| 检查项目是否重名 | checkName | POST /v1/projects/1/check?name= | N/A | |</p>
+<h4 id="查询某一资源的单个属性"><a href="#查询某一资源的单个属性" class="headerlink" title="查询某一资源的单个属性"></a>查询某一资源的单个属性</h4><p>对于单个资源的所有的查询 Action Name，都需要以 query 开头。Action Name 以 query+属性名结尾。<br>| Description | Action Name | HTTP Mapping | HTTP Request Body | HTTP Response Body |<br>| —————- | ————– | ———————— | —————– | —————————– |<br>| 查询资源的某属性 | queryAttribute | GET /:attribute | N/A | {“key”:“”,“value”:“”} |<br>| 查询用户的年龄 | queryAge | GET /v1/users/1/age | N/A | {“key”:“age”,“value”:“25”} |<br>| 查询用户下的项目 | queryProjects | GET /v1/users/1/projects | N/A | {“key”:“projects”,“value”:[]} |</p>
+<h4 id="查询-collection-的数量"><a href="#查询-collection-的数量" class="headerlink" title="查询 collection 的数量"></a>查询 collection 的数量</h4><p>计算集合自身的数量，使用 count 作为 Action Name 计算资源中子集合的数量，使用 count+集合名作为 Action Name。<br>| Description | Action Name | HTTP Mapping | HTTP Request Body | HTTP Response Body |<br>| ———————— | ————- | —————————— | —————– | ————————————- |<br>| 查询 Collection 的数量 | count | GET /count | N/A | {“key”:“”,“count”:“”} |<br>| 查询组织的数目 | count | GET /v1/organizations/count | N/A | {“key”:“organizations”,“count”:“100”} |<br>| 查询用户下的所有项目数量 | countProjects | GET /v1/users/1/projects/count | N/A | {“key”:“projects”,“count”:“100”} |</p>
+<h4 id="复杂条件查询"><a href="#复杂条件查询" class="headerlink" title="复杂条件查询"></a>复杂条件查询</h4><p>对于 collection 的所有查询 Action Name，都需要以 list 开头。查询的条件中，如果条件为一到两个，使用 By 和 And。</p>
+<p>eg.: listByUserIdAndName 如果查询条件大于 3 个，则使用 ByOptions，查询条件作为请求体传入。</p>
+<p>eg.: listByOptions</p>
+<h4 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h4><p>主版本号必须作为包名的最后一个字符。如：com.hand.controller.v1。</p>
+<p>版本兼容的修改：</p>
+<p>添加一个服务接口添加一个 api 方法添加一个请求字段添加一个相应字段添加一个字段的枚举值</p>
+<p>版本不兼容的修改：</p>
+<p>删除或重命名一个服务，接口，方法，枚举值改变一种 HTTP method 改变字段的类型改变一个 resource name</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line">@RestController(&quot;&#x2F;v1&#x2F;users&quot;)</span><br><span class="line"></span><br><span class="line">public class UserController &#123;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; list() &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&#123;id&#125;&quot;)</span><br><span class="line"></span><br><span class="line">public User query(@PathVariable(&quot;id&quot;) String id) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; create(@RequestBody User user) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PutMapping(&quot;&#x2F;&#123;id&#125;&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; update(@PathVariable(&quot;id&quot;) String id, @RequestBody User user) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@DeleteMapping(&quot;&#x2F;&#123;id&#125;&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; delete(@PathVariable(&quot;id&quot;) String id) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;batch_create&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; batchCreate(@RequestBody List&lt;User&gt; users) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;batch_delete&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; batchDelete(@RequestBody List&lt;User&gt; users) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;age&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; updateAge(@RequestParam(&quot;value&quot;) Integer age) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;&#123;:id&#125;&#x2F;undelete&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; undelete(@PathVariable(&quot;id&quot;) String id) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@PostMapping(&quot;&#x2F;check&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; checkName(@RequestParam(&quot;name&quot;) String name) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&#123;:id&#125;&#x2F;age&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; queryAge(@PathVariable(&quot;id&quot;) String id) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&#123;:id&#125;&#x2F;name&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; queryByUserIdAndName(@PathVariable(&quot;id&quot;) String id, @RequestParam(&quot;name&quot;) String name) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&#123;:id&#125;&#x2F;projects&#x2F;count&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; countProjects(@PathVariable(&quot;id&quot;) String id, @RequestParam(&quot;name&quot;) String name) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@GetMapping(&quot;&#x2F;&quot;)</span><br><span class="line"></span><br><span class="line">public ResponseEntity&lt;User&gt; listByOptions(@RequestBody Map&lt;String, Object&gt; options) &#123;</span><br><span class="line"></span><br><span class="line">return null;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83/" rel="tag"># 开发规范</a>
+          
+            <a href="/tags/Rest-api/" rel="tag"># Rest api</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/20/docker%E5%AE%89%E8%A3%85MongoDB%E5%A4%87%E5%BF%98/" rel="next" title="docker安装MongoDB备忘">
+                <i class="fa fa-chevron-left"></i> docker安装MongoDB备忘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/24/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" rel="prev" title="数据库设计规范">
+                数据库设计规范 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://sptan-public.oss-cn-beijing.aliyuncs.com/sptanlp.png"
+                alt="Sptan" />
+            
+              <p class="site-author-name" itemprop="name">Sptan</p>
+              <p class="site-description motion-element" itemprop="description">人懒,记性还不好,只能写下来</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/liupengblog" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.ruanyifeng.com/blog/" title="阮一峰的网络日志" target="_blank">阮一峰的网络日志</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful-API-Design-名词定义"><span class="nav-number">1.</span> <span class="nav-text">RESTful API Design 名词定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-Verbs"><span class="nav-number">2.</span> <span class="nav-text">HTTP Verbs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Resource-Oriented-Design"><span class="nav-number">3.</span> <span class="nav-text">Resource Oriented Design</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计流程"><span class="nav-number">4.</span> <span class="nav-text">设计流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Resource-Names"><span class="nav-number">4.1.</span> <span class="nav-text">Resource Names</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Resource-ID"><span class="nav-number">4.2.</span> <span class="nav-text">Resource ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection-ID"><span class="nav-number">4.3.</span> <span class="nav-text">Collection ID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Action-命名规范"><span class="nav-number">5.</span> <span class="nav-text">Action 命名规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本规范"><span class="nav-number">5.1.</span> <span class="nav-text">基本规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类别"><span class="nav-number">5.2.</span> <span class="nav-text">类别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#List"><span class="nav-number">5.2.1.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Query"><span class="nav-number">5.2.2.</span> <span class="nav-text">Query</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Create"><span class="nav-number">5.2.3.</span> <span class="nav-text">Create</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Update"><span class="nav-number">5.2.4.</span> <span class="nav-text">Update</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delete"><span class="nav-number">5.2.5.</span> <span class="nav-text">Delete</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义方法"><span class="nav-number">5.3.</span> <span class="nav-text">自定义方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#批量添加"><span class="nav-number">5.3.1.</span> <span class="nav-text">批量添加</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#批量删除"><span class="nav-number">5.3.2.</span> <span class="nav-text">批量删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更新单个资源中的属性"><span class="nav-number">5.3.3.</span> <span class="nav-text">更新单个资源中的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对资源执行某一动作"><span class="nav-number">5.3.4.</span> <span class="nav-text">对资源执行某一动作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询某一资源的单个属性"><span class="nav-number">5.3.5.</span> <span class="nav-text">查询某一资源的单个属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询-collection-的数量"><span class="nav-number">5.3.6.</span> <span class="nav-text">查询 collection 的数量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂条件查询"><span class="nav-number">5.3.7.</span> <span class="nav-text">复杂条件查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#版本控制"><span class="nav-number">5.3.8.</span> <span class="nav-text">版本控制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">6.</span> <span class="nav-text">Demo</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sptan</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
