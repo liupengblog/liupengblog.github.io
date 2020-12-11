@@ -87,7 +87,7 @@
 <meta property="og:description" content="Java中的日期核心概念 所有java.time对象都是不可变的 一个Instant是时间线上的一个点，功能上类似老的java.util.Date 在java的时间里，每天都是86400秒，没有闰秒 一个Duration就是两个时刻的间隔 LocalDateTime没有时区信息 TemporalAdjuster能处理常用的日历计算，例如查找某月的第一个星期二 ZonedDateTime是指定时区">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/liupengblog/blog-picture@master/Images/Java8%E6%97%A5%E6%9C%9F.png">
 <meta property="article:published_time" content="2020-10-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-11T02:45:14.391Z">
+<meta property="article:modified_time" content="2020-12-11T02:52:36.618Z">
 <meta property="article:author" content="Sptan">
 <meta property="article:tag" content="ModernJava">
 <meta property="article:tag" content="日期处理">
@@ -411,7 +411,7 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>now<br> of <br>ofInstant</td>
+<td>now<br> of <br> ofInstant</td>
 <td>从当前时间、指定的年月日、Instant或者ZonedId构造LocalDate对象</td>
 </tr>
 <tr>
@@ -482,7 +482,51 @@
 <h2 id="本地时间-LocalTime"><a href="#本地时间-LocalTime" class="headerlink" title="本地时间(LocalTime)"></a>本地时间(LocalTime)</h2><p>LocalTime表示本地时间,例如15:30:00。可以使用now或者of方法创建一个实例。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LocalTime now &#x3D; LocalTime.now();</span><br><span class="line">LocalTime bedTime &#x3D; LocalTime.of(22, 30); &#x2F;&#x2F;或者 LocalTime.of(22, 30, 0)</span><br></pre></td></tr></table></figure>
 
-<p>下表是LocalTime的常用方法。<br>|方法|描述|<br>|—-|—-|<br>|now, of,<br>ofInstant|这些静态方法用于构造LocalTime对象|<br>|plusHours,<br>plusMinutes, <br>plusSeconds,<br>plusNanos|向当前的LocalTime对象增加小时、分、秒、纳秒|<br>|minusHours,<br>minusMinutes,<br>minusSeconds,<br>minusNanos|从当前的LocalTime对象减小小时、分、秒、纳秒|<br>|plus, minus|增减Duration|<br>|withHour,<br>withMinute,<br>withSecond,<br>withNano|将LocalTime对象的小时、分钟、秒、纳秒设置为指定值，并返回一个新的LocalTime对象|<br>|getHour,<br>getMinute,<br>getSecond,<br>getNano|获得LocalTime的小时、分钟、秒、纳秒|<br>|toSecondOfDay,<br>toNanoOfDay|返回午夜零点到当前LocalTime对象之间相隔的秒数或者纳秒数|<br>|toEpochSecond|把LocalTime对象转换成从原点(1970-01-01)开始的秒数|<br>|isBefore,<br>isAfter|比较LocalTime|</p>
+<p>下表是LocalTime的常用方法。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>now, <br>of,<br> ofInstant</td>
+<td>这些静态方法用于构造LocalTime对象</td>
+</tr>
+<tr>
+<td>plusHours,<br>plusMinutes, <br>plusSeconds,<br>plusNanos</td>
+<td>向当前的LocalTime对象增加小时、分、秒、纳秒</td>
+</tr>
+<tr>
+<td>minusHours,<br>minusMinutes,<br>minusSeconds,<br>minusNanos</td>
+<td>从当前的LocalTime对象减小小时、分、秒、纳秒</td>
+</tr>
+<tr>
+<td>plus, minus</td>
+<td>增减Duration</td>
+</tr>
+<tr>
+<td>withHour,<br>withMinute,<br>withSecond,<br>withNano</td>
+<td>将LocalTime对象的小时、分钟、秒、纳秒设置为指定值，并返回一个新的LocalTime对象</td>
+</tr>
+<tr>
+<td>getHour,<br>getMinute,<br>getSecond,<br>getNano</td>
+<td>获得LocalTime的小时、分钟、秒、纳秒</td>
+</tr>
+<tr>
+<td>toSecondOfDay,<br>toNanoOfDay</td>
+<td>返回午夜零点到当前LocalTime对象之间相隔的秒数或者纳秒数</td>
+</tr>
+<tr>
+<td>toEpochSecond</td>
+<td>把LocalTime对象转换成从原点(1970-01-01)开始的秒数</td>
+</tr>
+<tr>
+<td>isBefore,<br>isAfter</td>
+<td>比较LocalTime</td>
+</tr>
+</tbody></table>
 <h2 id="日期调整器-TemporalAdjusters"><a href="#日期调整器-TemporalAdjusters" class="headerlink" title="日期调整器(TemporalAdjusters)"></a>日期调整器(TemporalAdjusters)</h2><p>TemporalAdjusters类提供了一些常用的静态方法用于调整日期。</p>
 <table>
 <thead>
